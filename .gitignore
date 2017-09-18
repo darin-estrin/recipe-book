@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/src/app/auth/firebase.ts
 
 # dependencies
 /node_modules

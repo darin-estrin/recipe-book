@@ -15,11 +15,13 @@
         <li routerLinkActive="active"><a routerLink="/shoppinglist">Shopping List</a></li>
       </ul>
       <ul class='nav navbar-nav navbar-right'>
+        <li routerLinkActive="active"><a routerLink="signup">Sign Up</a></li>
+        <li routerLinkActive="active"><a routerLink="signin">Sign In</a></li>
         <li class='dropdown' appDropdown>
           <a style="cursor: pointer;" class='dropdown-toggle'>Manage <span class='caret'></span></a>
           <ul class='dropdown-menu'>
-            <li><a style="cursor: pointer;">Save Data</a></li>
-            <li><a style="cursor: pointer;">Fetch Data</a></li>
+            <li><a style="cursor: pointer;" (click)="onSaveRecipes()">Save Data</a></li>
+            <li><a style="cursor: pointer;" (click)="onGetRecipes()">Fetch Data</a></li>
           </ul>
         </li>
       </ul>
