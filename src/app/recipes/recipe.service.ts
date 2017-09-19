@@ -9,7 +9,7 @@ import { ShoppingListService } from '../shopping-list/shopping-list.service';
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
 
-  private recipes: Recipe[] = [
+  recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel', 
       'A super-tasty Schnitzel',

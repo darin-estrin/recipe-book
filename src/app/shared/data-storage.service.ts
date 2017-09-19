@@ -29,10 +29,10 @@ export class DataStorageService {
           const recipes: Recipe[] = response.json();
           for (let recipe of recipes) {
             if(!recipe['ingredients']) {
-              console.log(recipe);
               recipe['ingredients'] = [];
             }
           }
+          this.recipeService.recipes = recipes;
           return recipes;
         }
       )
