@@ -15,7 +15,6 @@ export class DataStorageService {
   storeRecipes() {
     const user = this.authService.getUser();
 
-    console.log(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`);
     return this.http.put(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService
     .getRecipes());
   }
@@ -32,7 +31,6 @@ export class DataStorageService {
               recipe['ingredients'] = [];
             }
           }
-          this.recipeService.recipes = recipes;
           return recipes;
         }
       )
