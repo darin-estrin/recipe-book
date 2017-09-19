@@ -1,13 +1,20 @@
+import { AuthService } from './../auth/auth.service';
 import { DataStorageService } from './../shared/data-storage.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent{
-  constructor(private dataStorageService: DataStorageService) {}
+export class HeaderComponent implements OnInit {
+  authorized: boolean;
+  constructor(private dataStorageService: DataStorageService,
+              private authService: AuthService) {}
+  
+  ngOnInit() {
+  }
 
   onSaveRecipes() {
     this.dataStorageService.storeRecipes()
@@ -20,5 +27,9 @@ export class HeaderComponent{
 
   onGetRecipes() {
     this.dataStorageService.getRecipes();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }
