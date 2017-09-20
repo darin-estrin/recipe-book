@@ -8,7 +8,7 @@ import * as firebase from 'firebase';
 
 @Injectable()
 export class DataStorageService {
-  ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com';
+  ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com/users';
   constructor(private http: Http,
               private recipeService: RecipeService,
               private authService: AuthService) {}
@@ -16,20 +16,18 @@ export class DataStorageService {
   storeRecipes() {
     const user = this.authService.getUser();
 
-    return this.http.put(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService
     .getRecipes());
   }
 
   getRecipes():Recipe[] {
     //const user = this.authService.getUser();
     let fetchedRecipes: Recipe[];
-
     const user = firebase.auth().onAuthStateChanged((user) => {
-      this.http.get(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`)
+      this.http.get(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`)
       .map(
         (response: Response) => {
           const recipes: Recipe[] = response.json();
-          
           if(!recipes) { return; }
 
           for (let recipe of recipes) {

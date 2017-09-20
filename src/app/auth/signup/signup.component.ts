@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,16 +8,36 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  signupForm: FormGroup;
+  errors = {
+    passwordError: ''
+  };
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.signupForm = new FormGroup({
+      'email': new FormControl(null, [Validators.required, Validators.email]),
+      'password': new FormControl(null, Validators.required),
+      'passwordConfirm': new FormControl(null, Validators.required)
+    })
   }
 
-  onSignup(form: NgForm) {
-    const email = form.value.email;
-    const password = form.value.password;
-    this.authService.signupUser(email, password);
+  onSignup() {
+    console.log(this.signupForm);
+    if (this.signupForm.value.password !== this.signupForm.value.passwordConfirm) {
+      return this.errors.passwordError = "Password Do Not Match";
+    }
+    if (this.signupForm.value.passwordConfirm.length < 6) {
+      return this.errors.passwordError = "Password must be at least 6 character long";
+    }
+    console.log('form sent');
+    const { email, password } = this.signupForm.value;
+    const signup = this.authService.signupUser(email, password);
+    signup.catch(
+      (error) => this.errors.passwordError = "Email is already in use"
+    )
   }
 
 }

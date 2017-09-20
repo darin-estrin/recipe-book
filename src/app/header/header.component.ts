@@ -9,7 +9,6 @@ import * as firebase from 'firebase';
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit {
-  authorized: boolean;
   constructor(private dataStorageService: DataStorageService,
               private authService: AuthService) {}
   

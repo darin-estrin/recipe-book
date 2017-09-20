@@ -10,14 +10,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/auth-guard.service';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-  { path: 'recipes', component: RecipesComponent, children : [
-    { path: '', component: RecipeStartComponent },
+  { path: '', redirectTo: 'signin', pathMatch: 'full' },
+  { path: 'recipes', component: RecipesComponent, canActivate:[AuthGuard], children : [
     { path: 'new', component: RecipeEditComponent, canActivate: [AuthGuard] },
     { path: ':id', component: RecipeDetailComponent },
     { path: ':id/edit', component: RecipeEditComponent, canActivate:[AuthGuard] }
   ] },
-  { path: 'shoppinglist', component: ShoppingListComponent},
+  { path: 'shoppinglist', component: ShoppingListComponent, canActivate: [AuthGuard]},
   { path: 'signup', component: SignupComponent },
   { path: 'signin', component: SigninComponent }
 ];

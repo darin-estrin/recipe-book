@@ -1,7 +1,9 @@
 import { AuthService } from './../auth/auth.service';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
+import * as firebase from 'firebase';
+import 'rxjs/Rx';
 
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
@@ -11,7 +13,7 @@ import { ShoppingListService } from '../shopping-list/shopping-list.service';
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
   recipes: Recipe[];
-  ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com';
+  ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com/users';
 
   constructor(private shoppingListService: ShoppingListService,
               private authService: AuthService,
@@ -29,6 +31,17 @@ export class RecipeService {
   }
 
   getRecipe(index: number) {
+    // console.log(index);
+    // const user = firebase.auth().onAuthStateChanged((user) => {
+    //   console.log('url: ',`${this.ROOT_URL}/${user.uid}/recipes/${index}.json?auth=${user['De']}`)
+    //   this.http.get(`${this.ROOT_URL}/${user.uid}/recipes/${index}.json?auth=${user['De']}`)
+    //     .map(
+    //       (response: Response) => {
+    //         console.log('hi');
+    //         console.log(response.json());
+    //       }
+    //     ).subscribe
+    // })
     return this.recipes[index];
   }
 
