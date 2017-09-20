@@ -22,7 +22,6 @@ export class AuthService {
       .catch(
         error => {
           if(error){
-            console.log(error);
             reject(error);
           }
         }

@@ -25,14 +25,12 @@ export class SignupComponent implements OnInit {
   }
 
   onSignup() {
-    console.log(this.signupForm);
     if (this.signupForm.value.password !== this.signupForm.value.passwordConfirm) {
       return this.errors.passwordError = "Password Do Not Match";
     }
     if (this.signupForm.value.passwordConfirm.length < 6) {
       return this.errors.passwordError = "Password must be at least 6 character long";
     }
-    console.log('form sent');
     const { email, password } = this.signupForm.value;
     const signup = this.authService.signupUser(email, password);
     signup.catch(
