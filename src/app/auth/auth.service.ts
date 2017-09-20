@@ -13,27 +13,20 @@ export class AuthService {
     return  new Promise((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(
-        response => {
-          if(response) {
-            resolve(this.router.navigate(['/recipes']))
-          }
-        }
+        response => resolve(this.router.navigate(['/recipes']))
       )
       .catch(
-        error => {
-          if(error){
-            reject(error);
-          }
-        }
+        error => reject(error)
       );
     }) 
   }
 
   signinUser(email: string, password: string) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    return new Promise ((resolve, reject) => {
+      firebase.auth().signInWithEmailAndPassword(email, password)
       .then(
         response => {
-          this.router.navigate(['/']);
+          resolve(this.router.navigate(['/']));
           firebase.auth().currentUser.getIdToken()
             .then(
               (token: string) => {
@@ -44,10 +37,9 @@ export class AuthService {
         }
       )
       .catch(
-        error => {
-         return error
-        }
+        error => reject(error)
       );
+    })
   }
 
   logout() {

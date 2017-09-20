@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
+  errors: string;
 
   constructor(private authService: AuthService) { }
 
@@ -17,7 +18,10 @@ export class SigninComponent implements OnInit {
   onSignin(form: NgForm) {
     const email = form.value.email;
     const password = form.value.password;
-    this.authService.signinUser(email, password);
+    const signin = this.authService.signinUser(email, password);
+    signin.catch(
+      error => this.errors = 'Email or password does not match'
+    )
   }
 
 }

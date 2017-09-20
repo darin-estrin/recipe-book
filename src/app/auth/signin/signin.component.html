@@ -22,6 +22,9 @@
             required
             class="form-control">
         </div>
+        <div class="alert alert-danger" *ngIf="this.errors">
+          <strong>{{ this.errors }}</strong>
+        </div>
         <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Sign In</button>
       </form>
       <br>
