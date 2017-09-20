@@ -4,6 +4,7 @@ import { RecipeService } from './../recipes/recipe.service';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import 'rxjs/Rx';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class DataStorageService {
@@ -19,18 +20,24 @@ export class DataStorageService {
     .getRecipes());
   }
 
-  getRecipes() {
-    const user = this.authService.getUser();
+  getRecipes():Recipe[] {
+    //const user = this.authService.getUser();
+    let fetchedRecipes: Recipe[];
 
-    this.http.get(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`)
+    const user = firebase.auth().onAuthStateChanged((user) => {
+      this.http.get(`${this.ROOT_URL}/users/${user.uid}/recipes.json?auth=${user['De']}`)
       .map(
         (response: Response) => {
           const recipes: Recipe[] = response.json();
+          
+          if(!recipes) { return; }
+
           for (let recipe of recipes) {
             if(!recipe['ingredients']) {
               recipe['ingredients'] = [];
             }
           }
+          fetchedRecipes = recipes;
           return recipes;
         }
       )
@@ -39,5 +46,7 @@ export class DataStorageService {
           this.recipeService.setRecipes(recipes);
         }
       );
+    })
+    return fetchedRecipes;
   }
 }
