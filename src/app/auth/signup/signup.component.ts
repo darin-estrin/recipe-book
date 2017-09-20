@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,8 +13,7 @@ export class SignupComponent implements OnInit {
     passwordError: ''
   };
 
-  constructor(private authService: AuthService,
-              private formBuilder: FormBuilder) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -34,7 +33,10 @@ export class SignupComponent implements OnInit {
     const { email, password } = this.signupForm.value;
     const signup = this.authService.signupUser(email, password);
     signup.catch(
-      (error) => this.errors.passwordError = "Email is already in use"
+      (error) => {
+        this.errors.passwordError = "Email is already in use"
+        return error;
+      }
     )
   }
 

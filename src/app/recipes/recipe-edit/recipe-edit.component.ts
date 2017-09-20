@@ -1,5 +1,4 @@
 import { DataStorageService } from './../../shared/data-storage.service';
-import { Ingredient } from './../../shared/ingredient.model';
 import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Response } from '@angular/http';
@@ -46,7 +45,7 @@ export class RecipeEditComponent implements OnInit {
     this.dataStorageService.storeRecipes()
     .subscribe(
       (response: Response) => {
-        return;
+        return response;
       }
     );
     this.onCancel();

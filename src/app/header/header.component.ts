@@ -2,7 +2,6 @@ import { AuthService } from './../auth/auth.service';
 import { DataStorageService } from './../shared/data-storage.service';
 import { Component, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-header',

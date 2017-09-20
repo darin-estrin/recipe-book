@@ -23,7 +23,7 @@ export class DataStorageService {
   getRecipes():Recipe[] {
     //const user = this.authService.getUser();
     let fetchedRecipes: Recipe[];
-    const user = firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       this.http.get(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`)
       .map(
         (response: Response) => {

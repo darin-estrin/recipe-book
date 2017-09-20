@@ -20,7 +20,10 @@ export class SigninComponent implements OnInit {
     const password = form.value.password;
     const signin = this.authService.signinUser(email, password);
     signin.catch(
-      error => this.errors = 'Email or password does not match'
+      error => {
+        this.errors = 'Email or password does not match'
+        return error;
+      }
     )
   }
 
