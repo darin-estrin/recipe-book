@@ -54,6 +54,20 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label for="directions">Directions</label>
+              <textarea
+                type="text"
+                name="directions"
+                id="directions"
+                formControlName="directions"
+                class="form-control"
+                rows="6"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-xs-12" formArrayName="ingredients">
             <table
               *ngIf="recipeForm.get('ingredients').controls.length > 0" 

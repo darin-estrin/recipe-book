@@ -34,11 +34,19 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe) {
+    if(recipe.ingredients) {
+      recipe.ingredients.forEach((ingredient) => {
+        ingredient.name = ingredient.name.toLowerCase();
+      });
+    }
     this.recipes.push(recipe);
     this.recipesChanged.next(this.recipes.slice());
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
+    newRecipe.ingredients.forEach((ingredient) => {
+      ingredient.name = ingredient.name.toLowerCase();
+    });
     this.recipes[index] = newRecipe;
     this.recipesChanged.next(this.recipes.slice());
   }

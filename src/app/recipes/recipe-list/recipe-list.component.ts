@@ -28,6 +28,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         }
       );
     this.recipes = this.dataStorageService.getRecipes();
+    this.dataStorageService.fetchShoppingList();
   }
 
   onNewRecipe() {

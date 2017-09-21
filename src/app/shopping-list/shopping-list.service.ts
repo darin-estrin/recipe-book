@@ -5,7 +5,7 @@ export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>()
   startedEditing = new Subject<number>();
 
-  private ingredients: Ingredient[];
+  private ingredients: Ingredient[] = [];
 
   getIngredients() {
     return this.ingredients.slice();
@@ -23,18 +23,34 @@ export class ShoppingListService {
   }
 
   addIngredient(newIngredient: Ingredient) {
-    this.ingredients.forEach((ingredient) => {
-      if (ingredient.name === newIngredient.name){
-        ingredient.amount += newIngredient.amount
-      } else {
-        this.ingredients.push(newIngredient);
-      }
-    }) 
+    if (this.ingredients.length <= 0) {
+      this.ingredients.push(newIngredient);
+    } else {
+      this.ingredients.forEach((ingredient) => {
+        if (ingredient.name === newIngredient.name){
+          ingredient.amount += newIngredient.amount
+        } else {
+          this.ingredients.push(newIngredient);
+        }
+      }) 
+    }
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
-    this.ingredients.push(...ingredients);
+    if (!this.ingredients) {
+      return this.ingredients.push(...ingredients);
+    } else {
+       for (var i = 0; i < this.ingredients.length; i++) {
+         for (var j = 0; j < ingredients.length; j++) {
+           if (this.ingredients[i].name.indexOf(ingredients[j].name) > -1){
+             this.ingredients[i].amount += ingredients[j].amount;
+             ingredients.splice(j, 1);
+           }
+         }
+       }
+       this.ingredients.push(...ingredients);
+    }
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 

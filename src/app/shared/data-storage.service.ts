@@ -4,7 +4,7 @@ import { AuthService } from './../auth/auth.service';
 import { Recipe } from './../recipes/recipe.model';
 import { RecipeService } from './../recipes/recipe.service';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestMethod } from '@angular/http';
 import 'rxjs/Rx';
 import * as firebase from 'firebase';
 
@@ -22,6 +22,21 @@ export class DataStorageService {
     return this.http.put(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService.getRecipes());
   }
 
+  deleteRecipe(id: number) {
+    const user = this.authService.getUser();
+    const recipes = this.recipeService.getRecipes();
+    
+    this.http.delete(`${this.ROOT_URL}/${user.uid}/recipes/${id}.json?auth=${user['De']}`, {
+      method: RequestMethod.Delete
+    })
+
+    this.http.put(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`,
+    recipes).subscribe(
+      (response: Response) => response
+    );
+
+  }
+
   getRecipes():Recipe[] {
     //const user = this.authService.getUser();
     let fetchedRecipes: Recipe[];
@@ -37,6 +52,7 @@ export class DataStorageService {
               recipe['ingredients'] = [];
             }
           }
+
           fetchedRecipes = recipes;
           return recipes;
         }
@@ -58,8 +74,8 @@ export class DataStorageService {
 
   fetchShoppingList():Ingredient[] {
     let fetchedList: Ingredient[];
-    const user = this.authService.getUser();
-    this.http.get(`${this.ROOT_URL}/${user.uid}/shoppinglist.json?auth=${user['De']}`)
+    firebase.auth().onAuthStateChanged((user) => {
+      this.http.get(`${this.ROOT_URL}/${user.uid}/shoppinglist.json?auth=${user['De']}`)
       .map(
         (response: Response) => {
           const list: Ingredient[] = response.json();
@@ -71,6 +87,8 @@ export class DataStorageService {
           this.shoppingListService.setIngredients(list);
         }
       )
+    })
     return fetchedList;
   }
+
 }
