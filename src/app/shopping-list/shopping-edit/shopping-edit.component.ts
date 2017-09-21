@@ -1,3 +1,5 @@
+import { Response } from '@angular/http';
+import { DataStorageService } from './../../shared/data-storage.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -17,7 +19,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editItemIndex: number;
   editedItem: Ingredient;
 
-  constructor(private shoppingListService: ShoppingListService) { }
+  constructor(private shoppingListService: ShoppingListService,
+              private dataStorageSevice: DataStorageService) { }
 
   ngOnInit() {
     this.subscription = this.shoppingListService.startedEditing
@@ -36,7 +39,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   onAddItem(form: NgForm) {
     const value = form.value;
-    const newIngredient = new Ingredient(value.name, value.amount);
+    const newIngredient = new Ingredient(value.name.toLowerCase(), value.amount);
     if (this.editMode) {
       this.shoppingListService.updateIngredient(this.editItemIndex, newIngredient);
       this.editMode = false;
@@ -44,6 +47,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       this.shoppingListService.addIngredient(newIngredient);
     }
     form.reset();
+    this.dataStorageSevice.storeShoppingList().subscribe(
+      (response: Response) => response
+    );
   }
 
   onClear() {
@@ -54,6 +60,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onDelete() {
     this.shoppingListService.deleteIngredient(this.editItemIndex);
     this.onClear();
+    this.dataStorageSevice.storeShoppingList().subscribe(
+      (response: Response) => response
+    )
   }
 
   ngOnDestroy() {

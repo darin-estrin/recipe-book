@@ -1,3 +1,5 @@
+import { Ingredient } from './ingredient.model';
+import { ShoppingListService } from './../shopping-list/shopping-list.service';
 import { AuthService } from './../auth/auth.service';
 import { Recipe } from './../recipes/recipe.model';
 import { RecipeService } from './../recipes/recipe.service';
@@ -11,13 +13,13 @@ export class DataStorageService {
   ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com/users';
   constructor(private http: Http,
               private recipeService: RecipeService,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              private shoppingListService: ShoppingListService) {}
 
   storeRecipes() {
     const user = this.authService.getUser();
 
-    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService
-    .getRecipes());
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`, this.recipeService.getRecipes());
   }
 
   getRecipes():Recipe[] {
@@ -46,5 +48,29 @@ export class DataStorageService {
       );
     })
     return fetchedRecipes;
+  }
+
+  storeShoppingList() {
+    const user = this.authService.getUser();
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/shoppinglist.json?auth=${user['De']}`,
+    this.shoppingListService.getIngredients());
+  }
+
+  fetchShoppingList():Ingredient[] {
+    let fetchedList: Ingredient[];
+    const user = this.authService.getUser();
+    this.http.get(`${this.ROOT_URL}/${user.uid}/shoppinglist.json?auth=${user['De']}`)
+      .map(
+        (response: Response) => {
+          const list: Ingredient[] = response.json();
+          fetchedList = list;
+          return list;
+        }
+      ).subscribe(
+        (list: Ingredient[]) => {
+          this.shoppingListService.setIngredients(list);
+        }
+      )
+    return fetchedList;
   }
 }

@@ -5,21 +5,31 @@ export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>()
   startedEditing = new Subject<number>();
 
-  private ingredients: Ingredient[] = [
-    new Ingredient('Apples', 5),
-    new Ingredient('Tomatoes', 10)
-  ];
+  private ingredients: Ingredient[];
 
   getIngredients() {
     return this.ingredients.slice();
+  }
+
+  setIngredients(ingredients: Ingredient[]) {
+    if (ingredients) {
+      this.ingredients = ingredients;
+      this.ingredientsChanged.next(this.ingredients.slice());
+    }
   }
 
   getIngredient(index: number) {
     return this.ingredients[index];
   }
 
-  addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
+  addIngredient(newIngredient: Ingredient) {
+    this.ingredients.forEach((ingredient) => {
+      if (ingredient.name === newIngredient.name){
+        ingredient.amount += newIngredient.amount
+      } else {
+        this.ingredients.push(newIngredient);
+      }
+    }) 
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
