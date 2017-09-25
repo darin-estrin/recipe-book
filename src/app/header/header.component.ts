@@ -9,7 +9,7 @@ import { Response } from '@angular/http';
 })
 export class HeaderComponent implements OnInit {
   constructor(private dataStorageService: DataStorageService,
-              private authService: AuthService) {}
+              public authService: AuthService) {}
   
   ngOnInit() {
   }

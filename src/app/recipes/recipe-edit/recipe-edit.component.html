@@ -70,7 +70,7 @@
         <div class="row">
           <div class="col-xs-12" formArrayName="ingredients">
             <table
-              *ngIf="recipeForm.get('ingredients').controls.length > 0" 
+              *ngIf="renderTable(recipeForm)" 
               class="table">
               <thead>
                 <tr>
@@ -82,7 +82,7 @@
             </table>
             <div 
               class="row form-group"
-              *ngFor="let ingredientCtrl of recipeForm.get('ingredients').controls; let i = index" 
+              *ngFor="let ingredientCtrl of getIngredients(recipeForm); let i = index" 
               [formGroupName]="i">
               <div class="col-xs-8">
                 <input
