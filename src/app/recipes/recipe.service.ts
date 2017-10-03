@@ -10,7 +10,6 @@ import { ShoppingListService } from '../shopping-list/shopping-list.service';
 export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
   recipes: Recipe[];
-  ROOT_URL = 'https://recipe-book-f11e8.firebaseio.com/users';
 
   constructor(private shoppingListService: ShoppingListService) {}
 
@@ -38,6 +37,9 @@ export class RecipeService {
       recipe.ingredients.forEach((ingredient) => {
         ingredient.name = ingredient.name.toLowerCase();
       });
+    }
+    if (!this.recipes) {
+      this.recipes = [];
     }
     this.recipes.push(recipe);
     this.recipesChanged.next(this.recipes.slice());
