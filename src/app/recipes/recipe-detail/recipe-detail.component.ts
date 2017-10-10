@@ -3,6 +3,7 @@ import { DataStorageService } from './../../shared/data-storage.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import $ from 'jquery';
 
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
@@ -33,7 +34,13 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onAddToShoppingList(quantity: number) {
-    this.recipeService.addToShoppingList(this.recipe.ingredients, quantity);
+    const ingredients = [];
+    this.recipe.ingredients.forEach((element) => {
+      var temp = {amount: element.amount, name: element.name };
+      temp.amount *= quantity;
+      ingredients.push(temp);
+    });
+    this.recipeService.addToShoppingList(ingredients);
     this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     );
@@ -51,6 +58,12 @@ export class RecipeDetailComponent implements OnInit {
       return;
     }
     this.onAddToShoppingList(quantity);
+    form.reset();
+    $('#recipeModal').removeClass('in')
+      .attr('aria-hidden', 'true')
+      .css('display', 'none');
+    $('.modal-backdrop').remove();
+    $('body').removeClass('modal-open');
   }
 
   onDeleteRecipe() {

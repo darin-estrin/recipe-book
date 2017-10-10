@@ -40,25 +40,20 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  addIngredients(ingredients: Ingredient[], quantity: number) {
+  addIngredients(ingredients: Ingredient[]) {
     if (!this.ingredients) {
       return this.ingredients.push(...ingredients);
     } else {
-       let newIngredients = ingredients;
        for (var i = 0; i < this.ingredients.length; i++) {
-         for (var j = 0; j < newIngredients.length; j++) {
-           if (this.ingredients[i].name.indexOf(newIngredients[j].name) > -1){
-             this.ingredients[i].amount += newIngredients[j].amount *= quantity;
-             newIngredients.splice(j, 1);
+         for (var j = 0; j < ingredients.length; j++) {
+           if (this.ingredients[i].name.indexOf(ingredients[j].name) > -1){
+             this.ingredients[i].amount += ingredients[j].amount;
+             ingredients.splice(j, 1);
            }
          }
        }
-       newIngredients.forEach(function(element) {
-         element.amount *= quantity;
-       })
-       this.ingredients.push(...newIngredients);
+       this.ingredients.push(...ingredients);
     }
-    console.log(this.ingredients);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
