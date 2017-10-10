@@ -25,7 +25,7 @@
         Manage Recipe <span class='caret'></span>
       </button>
       <ul class='dropdown-menu'>
-        <li><a (click)='onAddToShoppingList()' style="cursor: pointer;">Add to Shopping List</a></li>
+        <li><a data-toggle="modal" data-target="#recipeModal" style="cursor: pointer;">Add to Shopping List</a></li>
         <li><a style="cursor: pointer;" (click)="onEditRecipe()">Edit Recipe</a></li>
         <li><a style="cursor: pointer;" (click)="onDeleteRecipe()">Delete Recipe</a></li>
       </ul>
@@ -50,3 +50,34 @@
     </ul>
   </div>
 </div>
+
+<div id="recipeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">How many serving would you live to make?</h4>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="onAddIngredients(f)" #f="ngForm">
+            <div class='form-group'>
+              <input
+                type="number"
+                class="form-control"
+                name="quantity"
+                id="quantity"
+                required
+                ngModel>
+            </div>
+            <div class="alert alert-danger" *ngIf="this.error">
+              <strong>{{ this.error }}</strong>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" [disabled]="!f.valid" class="btn btn-primary">Add</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,6 +1,7 @@
 import { Response } from '@angular/http';
 import { DataStorageService } from './../../shared/data-storage.service';
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Recipe } from '../recipe.model';
@@ -14,6 +15,7 @@ import { RecipeService } from '../recipe.service';
 export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   id: number;
+  error: string;
 
   constructor(private recipeService: RecipeService,
               private route: ActivatedRoute,
@@ -30,8 +32,8 @@ export class RecipeDetailComponent implements OnInit {
       );
   }
 
-  onAddToShoppingList() {
-    this.recipeService.addToShoppingList(this.recipe.ingredients);
+  onAddToShoppingList(quantity: number) {
+    this.recipeService.addToShoppingList(this.recipe.ingredients, quantity);
     this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     );
@@ -39,6 +41,16 @@ export class RecipeDetailComponent implements OnInit {
 
   onEditRecipe() {
     this.router.navigate(['edit'], { relativeTo: this.route })
+  }
+
+  onAddIngredients(form: NgForm) {
+    const regex = /^[1-9]+[0-9]*$/;
+    const quantity = form.value.quantity
+    if (!regex.test(quantity)) {
+      this.error = 'Amount must be more than 1';
+      return;
+    }
+    this.onAddToShoppingList(quantity);
   }
 
   onDeleteRecipe() {

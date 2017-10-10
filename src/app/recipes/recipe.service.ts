@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/Rx';
@@ -28,8 +29,8 @@ export class RecipeService {
     return this.recipes[index];
   }
 
-  addToShoppingList(ingredients: Ingredient[]) {
-    this.shoppingListService.addIngredients(ingredients);
+  addToShoppingList(ingredients: Ingredient[], quantity: number) {
+    this.shoppingListService.addIngredients(ingredients, quantity);
   }
 
   addRecipe(recipe: Recipe) {
