@@ -15,12 +15,14 @@ import { ShoppingListService } from '../shopping-list.service';
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   @ViewChild('f') slForm: NgForm;
   subscription: Subscription;
+  ingredientSubscription: Subscription;
   editMode = false;
   editItemIndex: number;
   editedItem: Ingredient;
+  extraIngredients: Ingredient[];
 
   constructor(private shoppingListService: ShoppingListService,
-              private dataStorageSevice: DataStorageService) { }
+              private dataStorageService: DataStorageService) { }
 
   ngOnInit() {
     this.subscription = this.shoppingListService.startedEditing
@@ -35,6 +37,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
           });
         }
       );
+      this.ingredientSubscription = this.shoppingListService.extraIngredientsChanged
+      .subscribe(
+        (ingredients: Ingredient[]) => {
+          this.extraIngredients = ingredients;
+        }
+      );
+    this.dataStorageService.fetchExtraIngredients();
   }
 
   onAddItem(form: NgForm) {
@@ -45,9 +54,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       this.editMode = false;
     } else {
       this.shoppingListService.addIngredient(newIngredient);
+      this.shoppingListService.addExtraIngredient(newIngredient);
     }
     form.reset();
-    this.dataStorageSevice.storeShoppingList().subscribe(
+    this.dataStorageService.storeAdditiontalIngredients().subscribe(
+      (response: Response) => response
+    )
+    this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     );
   }
@@ -60,13 +73,14 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onDelete() {
     this.shoppingListService.deleteIngredient(this.editItemIndex);
     this.onClear();
-    this.dataStorageSevice.storeShoppingList().subscribe(
+    this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     )
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.ingredientSubscription.unsubscribe();
   }
 
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-recipe-ingredients',
@@ -6,10 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recipe-ingredients.component.css']
 })
 export class RecipeIngredientsComponent implements OnInit {
+  @ViewChild('f') slForm: NgForm;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onClear() {
+    this.slForm.reset();
   }
 
 }

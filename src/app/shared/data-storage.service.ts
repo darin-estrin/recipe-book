@@ -72,6 +72,12 @@ export class DataStorageService {
     this.shoppingListService.getIngredients());
   }
 
+  storeAdditiontalIngredients() {
+    const user = this.authService.getUser();
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/extraIngredients.json?auth=${user['De']}`, 
+    this.shoppingListService.getExtraIngredients());
+  }
+
   fetchShoppingList():Ingredient[] {
     let fetchedList: Ingredient[];
     firebase.auth().onAuthStateChanged((user) => {
@@ -87,6 +93,25 @@ export class DataStorageService {
           this.shoppingListService.setIngredients(list);
         }
       )
+    })
+    return fetchedList;
+  }
+
+  fetchExtraIngredients(): Ingredient[] {
+    let fetchedList: Ingredient[];
+    firebase.auth().onAuthStateChanged(user => {
+      this.http.get(`${this.ROOT_URL}/${user.uid}/extraIngredients.json?auth=${user['De']}`)
+        .map(
+          (response: Response) => {
+            const list: Ingredient[] = response.json();
+            fetchedList = list;
+            return list;
+          }
+        ).subscribe(
+          (list: Ingredient[]) => {
+            this.shoppingListService.setExtraIngredients(list);
+          }
+        )
     })
     return fetchedList;
   }

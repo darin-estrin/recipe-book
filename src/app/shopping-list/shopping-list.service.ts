@@ -3,18 +3,31 @@ import { Subject } from 'rxjs/Subject';
 
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>()
+  extraIngredientsChanged = new Subject<Ingredient[]>();
   startedEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [];
+  private extraIngredients: Ingredient[] = [];
 
   getIngredients() {
     return this.ingredients.slice();
+  }
+
+  getExtraIngredients() {
+    return this.extraIngredients.slice();
   }
 
   setIngredients(ingredients: Ingredient[]) {
     if (ingredients) {
       this.ingredients = ingredients;
       this.ingredientsChanged.next(this.ingredients.slice());
+    }
+  }
+
+  setExtraIngredients(ingredients: Ingredient[]) {
+    if (ingredients) {
+      this.extraIngredients = ingredients;
+      this.extraIngredientsChanged.next(this.extraIngredients.slice());
     }
   }
 
@@ -38,6 +51,24 @@ export class ShoppingListService {
       }
     }
     this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  addExtraIngredient(newIngredient: Ingredient) {
+    const currentIngredients = [];
+    this.extraIngredients.forEach(ingredient => {
+      currentIngredients.push(ingredient.name);
+    });
+    if (this.extraIngredients.length <= 0) {
+      this.extraIngredients.push(newIngredient);
+    } else {
+      if (currentIngredients.indexOf(newIngredient.name) > -1) {
+        const index = currentIngredients.indexOf(newIngredient.name);
+        this.extraIngredients[index].amount += newIngredient.amount;
+      } else {
+        this.extraIngredients.push(newIngredient);
+      }
+    }
+    this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
