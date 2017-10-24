@@ -90,10 +90,24 @@ export class ShoppingListService {
 
   updateIngredient(index: number, newIngredient:Ingredient) {
     this.ingredients[index] = newIngredient;
+    for (var i = 0; i < this.extraIngredients.length; i++) {
+      if (this.extraIngredients[i].name === newIngredient.name) {
+        this.extraIngredients[i] = newIngredient;
+      }
+      this.extraIngredientsChanged.next(this.extraIngredients.slice());
+    }
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   deleteIngredient(index:number) {
+    const ingredient = this.ingredients[index];
+    console.log(ingredient);
+    for (var i = 0; i < this.extraIngredients.length; i++) {
+      if (this.extraIngredients[i].name === ingredient.name) {
+        this.extraIngredients.splice(i, 1);
+      }
+      this.extraIngredientsChanged.next(this.extraIngredients.slice());
+    }
     this.ingredients.splice(index, 1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
