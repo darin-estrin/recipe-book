@@ -146,14 +146,28 @@ export class ShoppingListService {
 
   deleteIngredient(index:number) {
     const ingredient = this.ingredients[index];
+    this.deleteAdditionalIngredient(ingredient);
+    this.deleteRecipeIngredient(ingredient);
+    this.ingredients.splice(index, 1);
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  deleteAdditionalIngredient(ingredient: Ingredient) {
     for (var i = 0; i < this.extraIngredients.length; i++) {
       if (this.extraIngredients[i].name === ingredient.name) {
         this.extraIngredients.splice(i, 1);
       }
       this.extraIngredientsChanged.next(this.extraIngredients.slice());
     }
-    this.ingredients.splice(index, 1);
-    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  deleteRecipeIngredient(ingredient: Ingredient) {
+    for (var i = 0; i < this.recipeIngredients.length; i++) {
+      if (this.recipeIngredients[i].name === ingredient.name) {
+        this.recipeIngredients.splice(i, 1);
+      }
+      this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
+    }
   }
 
 }
