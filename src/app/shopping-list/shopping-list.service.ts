@@ -4,10 +4,12 @@ import { Subject } from 'rxjs/Subject';
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>()
   extraIngredientsChanged = new Subject<Ingredient[]>();
+  recipeIngredientsChanged = new Subject<Ingredient[]>();
   startedEditing = new Subject<number>();
 
   private ingredients: Ingredient[] = [];
   private extraIngredients: Ingredient[] = [];
+  private recipeIngredients: Ingredient[] = [];
 
   getIngredients() {
     return this.ingredients.slice();
@@ -15,6 +17,10 @@ export class ShoppingListService {
 
   getExtraIngredients() {
     return this.extraIngredients.slice();
+  }
+
+  getRecipeIngredients() {
+    return this.recipeIngredients.slice();
   }
 
   setIngredients(ingredients: Ingredient[]) {
@@ -28,6 +34,13 @@ export class ShoppingListService {
     if (ingredients) {
       this.extraIngredients = ingredients;
       this.extraIngredientsChanged.next(this.extraIngredients.slice());
+    }
+  }
+
+  setRecipeIngredients(ingredients: Ingredient[]) {
+    if (ingredients) {
+      this.recipeIngredients = ingredients;
+      this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
     }
   }
 
@@ -88,6 +101,20 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
+  addRecipeIngredients(ingredients: Ingredient[]) {
+    for (var i = 0; i < this.recipeIngredients.length; i++) {
+      for (var j = 0; j < ingredients.length; j++) {
+        if (this.recipeIngredients[i].name.indexOf(ingredients[j].name) > -1){
+          this.recipeIngredients[i].amount += ingredients[j].amount;
+          ingredients.splice(j, 1);
+        }
+      }
+    }
+    this.recipeIngredients.push(...ingredients);
+    console.log(this.recipeIngredients);
+    this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
+  }
+
   updateIngredient(index: number, newIngredient:Ingredient) {
     this.ingredients[index] = newIngredient;
     for (var i = 0; i < this.extraIngredients.length; i++) {
@@ -101,7 +128,6 @@ export class ShoppingListService {
 
   deleteIngredient(index:number) {
     const ingredient = this.ingredients[index];
-    console.log(ingredient);
     for (var i = 0; i < this.extraIngredients.length; i++) {
       if (this.extraIngredients[i].name === ingredient.name) {
         this.extraIngredients.splice(i, 1);

@@ -72,6 +72,12 @@ export class DataStorageService {
     this.shoppingListService.getIngredients());
   }
 
+  storeRecipeList() {
+    const user = this.authService.getUser();
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipeIngredients.json?auth=${user['De']}`,
+    this.shoppingListService.getRecipeIngredients());
+  }
+
   storeAdditiontalIngredients() {
     const user = this.authService.getUser();
     return this.http.put(`${this.ROOT_URL}/${user.uid}/extraIngredients.json?auth=${user['De']}`, 
@@ -110,6 +116,26 @@ export class DataStorageService {
         ).subscribe(
           (list: Ingredient[]) => {
             this.shoppingListService.setExtraIngredients(list);
+          }
+        )
+    })
+    return fetchedList;
+  }
+
+  fetchRecipeIngredients(): Ingredient[] {
+    let fetchedList: Ingredient[];
+    firebase.auth().onAuthStateChanged(user => {
+      this.http.get(`${this.ROOT_URL}/${user.uid}/recipeIngredients.json?auth=${user['De']}`)
+        .map(
+          (response: Response) => {
+            const list: Ingredient[] = response.json();
+            fetchedList = list;
+            console.log('fetched list', list);
+            return list;
+          }
+        ).subscribe(
+          (list: Ingredient[]) => {
+            this.shoppingListService.setRecipeIngredients(list);
           }
         )
     })

@@ -37,12 +37,12 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
           });
         }
       );
-      this.ingredientSubscription = this.shoppingListService.extraIngredientsChanged
-      .subscribe(
-        (ingredients: Ingredient[]) => {
-          this.extraIngredients = ingredients;
-        }
-      );
+    this.ingredientSubscription = this.shoppingListService.extraIngredientsChanged
+    .subscribe(
+      (ingredients: Ingredient[]) => {
+        this.extraIngredients = ingredients;
+      }
+    );
     this.dataStorageService.fetchExtraIngredients();
   }
 

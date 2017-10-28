@@ -1,6 +1,6 @@
 <div class='row'>
   <div class='col-xs-12'>
-    <h4>Additional Ingredients</h4>
+    <h4>Additional Items</h4>
     <form (ngSubmit)="onAddItem(f)" #f="ngForm">
       <div class='row'>
         <div class='col-sm-5 form-group'>
@@ -46,9 +46,8 @@
     <br>
     <ul class="list-group">
       <li
-        class="list-group-item" 
-        style="cursor: pointer;"
-        *ngFor='let ingredient of extraIngredients; let i = index'>
+        class="list-group-item"
+        *ngFor='let ingredient of extraIngredients;'>
         {{ ingredient.name}} ({{ ingredient.amount }})
       </li>
     </ul>

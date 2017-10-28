@@ -34,16 +34,22 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onAddToShoppingList(quantity: number) {
-    const ingredients = [];
+    const shoppingListIngredients = [];
+    const recipeIngredients = [];
     this.recipe.ingredients.forEach((element) => {
       var temp = {amount: element.amount, name: element.name };
       temp.amount *= quantity;
-      ingredients.push(temp);
+      shoppingListIngredients.push(temp);
+      recipeIngredients.push(temp);
     });
-    this.recipeService.addToShoppingList(ingredients);
+    this.recipeService.addToShoppingList(shoppingListIngredients);
+    this.recipeService.addRecipeIngredients(recipeIngredients);
     this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     );
+    this.dataStorageService.storeRecipeList().subscribe(
+      (response: Response) => response
+    )
   }
 
   onEditRecipe() {

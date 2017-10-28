@@ -33,6 +33,11 @@ export class RecipeService {
     this.shoppingListService.addIngredients(ingredients);
   }
 
+  addRecipeIngredients(ingredients: Ingredient[]) {
+    console.log(ingredients);
+    this.shoppingListService.addRecipeIngredients(ingredients);
+  }
+
   addRecipe(recipe: Recipe) {
     if(recipe.ingredients) {
       recipe.ingredients.forEach((ingredient) => {
