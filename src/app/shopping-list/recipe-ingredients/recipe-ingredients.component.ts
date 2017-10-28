@@ -1,3 +1,4 @@
+import { Response } from '@angular/http';
 import { Ingredient } from './../../shared/ingredient.model';
 import { Subscription } from 'rxjs/Subscription';
 import { ShoppingListService } from './../shopping-list.service';
@@ -26,6 +27,22 @@ export class RecipeIngredientsComponent implements OnInit {
       }
     );
     this.dataStorageService.fetchRecipeIngredients();
+  }
+
+  onAddItem(form: NgForm) {
+    const ingredient = {
+      name: form.value.name,
+      amount: form.value.amount
+    }
+    this.shoppingListService.addIngredient(ingredient);
+    this.shoppingListService.addRecipeIngredient(ingredient);
+    form.reset();
+    this.dataStorageService.storeShoppingList().subscribe(
+      (response: Response) => response
+    );
+    this.dataStorageService.storeRecipeList().subscribe(
+      (response: Response) => response
+    );
   }
 
   onClear() {

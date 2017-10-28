@@ -84,6 +84,24 @@ export class ShoppingListService {
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
+  addRecipeIngredient(newIngredient: Ingredient) {
+    const currentIngredients = [];
+    this.recipeIngredients.forEach((ingredient) => {
+      currentIngredients.push(ingredient.name);
+    })
+    if (this.ingredients.length <= 0) {
+      this.ingredients.push(newIngredient);
+    } else {
+      if (currentIngredients.indexOf(newIngredient.name) > -1) {
+        const index = currentIngredients.indexOf(newIngredient.name);
+        this.recipeIngredients[index].amount += newIngredient.amount;
+      } else {
+        this.recipeIngredients.push(newIngredient);
+      }
+    }
+    this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
+  }
+
   addIngredients(ingredients: Ingredient[]) {
     if (!this.ingredients) {
       return this.ingredients.push(...ingredients);

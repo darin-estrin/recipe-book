@@ -130,7 +130,6 @@ export class DataStorageService {
           (response: Response) => {
             const list: Ingredient[] = response.json();
             fetchedList = list;
-            console.log('fetched list', list);
             return list;
           }
         ).subscribe(
