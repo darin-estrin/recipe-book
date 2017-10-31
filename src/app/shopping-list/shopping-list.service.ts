@@ -129,7 +129,6 @@ export class ShoppingListService {
       }
     }
     this.recipeIngredients.push(...ingredients);
-    console.log(this.recipeIngredients);
     this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
   }
 

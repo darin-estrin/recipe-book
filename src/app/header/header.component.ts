@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
     this.dataStorageService.storeRecipes()
       .subscribe(
         (response: Response) => {
-          console.log(response);
+          return response;
         }
       );
   }

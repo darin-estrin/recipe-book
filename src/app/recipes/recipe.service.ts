@@ -34,7 +34,6 @@ export class RecipeService {
   }
 
   addRecipeIngredients(ingredients: Ingredient[]) {
-    console.log(ingredients);
     this.shoppingListService.addRecipeIngredients(ingredients);
   }
 
