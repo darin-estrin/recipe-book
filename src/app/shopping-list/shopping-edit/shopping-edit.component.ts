@@ -76,6 +76,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response
     )
+    this.dataStorageService.storeAdditiontalIngredients().subscribe(
+      (response: Response) => response
+    )
   }
 
   ngOnDestroy() {

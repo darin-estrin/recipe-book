@@ -1,4 +1,5 @@
 import { Ingredient } from './ingredient.model';
+import { RecipeItem } from './recipe-item.model';
 import { ShoppingListService } from './../shopping-list/shopping-list.service';
 import { AuthService } from './../auth/auth.service';
 import { Recipe } from './../recipes/recipe.model';
@@ -74,8 +75,8 @@ export class DataStorageService {
 
   storeRecipeList() {
     const user = this.authService.getUser();
-    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipeIngredients.json?auth=${user['De']}`,
-    this.shoppingListService.getRecipeIngredients());
+    return this.http.put(`${this.ROOT_URL}/${user.uid}/recipeList.json?auth=${user['De']}`,
+    this.shoppingListService.getRecipeList());
   }
 
   storeAdditiontalIngredients() {
@@ -122,19 +123,19 @@ export class DataStorageService {
     return fetchedList;
   }
 
-  fetchRecipeIngredients(): Ingredient[] {
-    let fetchedList: Ingredient[];
+  fetchRecipeList(): RecipeItem[] {
+    let fetchedList: RecipeItem[];
     firebase.auth().onAuthStateChanged(user => {
-      this.http.get(`${this.ROOT_URL}/${user.uid}/recipeIngredients.json?auth=${user['De']}`)
+      this.http.get(`${this.ROOT_URL}/${user.uid}/recipeList.json?auth=${user['De']}`)
         .map(
           (response: Response) => {
-            const list: Ingredient[] = response.json();
+            const list: RecipeItem[] = response.json();
             fetchedList = list;
             return list;
           }
         ).subscribe(
-          (list: Ingredient[]) => {
-            this.shoppingListService.setRecipeIngredients(list);
+          (list: RecipeItem[]) => {
+            this.shoppingListService.setRecipeList(list);
           }
         )
     })

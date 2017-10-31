@@ -1,5 +1,6 @@
+import { RecipeListComponent } from './../../recipes/recipe-list/recipe-list.component';
 import { Response } from '@angular/http';
-import { Ingredient } from './../../shared/ingredient.model';
+import { RecipeItem } from './../../shared/recipe-item.model';
 import { Subscription } from 'rxjs/Subscription';
 import { ShoppingListService } from './../shopping-list.service';
 import { DataStorageService } from './../../shared/data-storage.service';
@@ -13,20 +14,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class RecipeIngredientsComponent implements OnInit {
   @ViewChild('f') slForm: NgForm;
-  ingredientSubscription: Subscription;
-  recipeIngredients: Ingredient[];
+  recipeListSubscription: Subscription;
+  recipeItems: RecipeItem[];
 
   constructor(private shoppingListService: ShoppingListService,
               private dataStorageService: DataStorageService) { }
 
   ngOnInit() {
-    this.ingredientSubscription = this.shoppingListService.recipeIngredientsChanged
+    this.recipeListSubscription = this.shoppingListService.recipeListChanged
     .subscribe(
-      (ingredients: Ingredient[]) => {
-        this.recipeIngredients = ingredients;
+      (recipeItems: RecipeItem[]) => {
+        this.recipeItems = recipeItems;
       }
     );
-    this.dataStorageService.fetchRecipeIngredients();
+    this.dataStorageService.fetchRecipeList();
   }
 
   onAddItem(form: NgForm) {
@@ -35,7 +36,7 @@ export class RecipeIngredientsComponent implements OnInit {
       amount: form.value.amount
     }
     this.shoppingListService.addIngredient(ingredient);
-    this.shoppingListService.addRecipeIngredient(ingredient);
+    // this.shoppingListService.addRecipeIngredient(ingredient);
     form.reset();
     this.dataStorageService.storeShoppingList().subscribe(
       (response: Response) => response

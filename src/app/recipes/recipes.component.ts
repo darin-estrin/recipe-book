@@ -1,3 +1,4 @@
+import { RecipeItem } from './../shared/recipe-item.model';
 import { Ingredient } from './../shared/ingredient.model';
 import { Subscription } from 'rxjs/Subscription';
 import { ShoppingListService } from './../shopping-list/shopping-list.service';
@@ -11,19 +12,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecipesComponent implements OnInit {
   private subscription: Subscription;
-  ingredients: Ingredient[];
+  recipeItems: RecipeItem[]
 
   constructor(private dataStorageService: DataStorageService,
               private shoppingListService: ShoppingListService) { }
 
   ngOnInit() {
-    this.subscription = this.shoppingListService.recipeIngredientsChanged
+    this.subscription = this.shoppingListService.recipeListChanged
     .subscribe(
-      (ingredients: Ingredient[]) => {
-        this.ingredients = ingredients;
+      (recipeItems: RecipeItem[]) => {
+        this.recipeItems = recipeItems;
       }
     );
-    this.dataStorageService.fetchRecipeIngredients();
+    this.dataStorageService.fetchRecipeList();
   }
 
 }

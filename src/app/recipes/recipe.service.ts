@@ -1,6 +1,7 @@
 import { element } from 'protractor';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { RecipeItem } from './../shared/recipe-item.model';
 import 'rxjs/Rx';
 
 import { Recipe } from './recipe.model';
@@ -33,8 +34,8 @@ export class RecipeService {
     this.shoppingListService.addIngredients(ingredients);
   }
 
-  addRecipeIngredients(ingredients: Ingredient[]) {
-    this.shoppingListService.addRecipeIngredients(ingredients);
+  addRecipeItem(recipeItem: RecipeItem) {
+    this.shoppingListService.addRecipeItem(recipeItem);
   }
 
   addRecipe(recipe: Recipe) {
