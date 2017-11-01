@@ -6,7 +6,7 @@ export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>()
   extraIngredientsChanged = new Subject<Ingredient[]>();
   recipeListChanged = new Subject<Ingredient[]>();
-  startedEditing = new Subject<number>();
+  error: string;
 
   private ingredients: Ingredient[] = [];
   private extraIngredients: Ingredient[] = [];
@@ -85,23 +85,24 @@ export class ShoppingListService {
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
-  // addRecipeIngredient(newIngredient: Ingredient) {
-  //   const currentIngredients = [];
-  //   this.recipeIngredients.forEach((ingredient) => {
-  //     currentIngredients.push(ingredient.name);
-  //   })
-  //   if (this.ingredients.length <= 0) {
-  //     this.ingredients.push(newIngredient);
-  //   } else {
-  //     if (currentIngredients.indexOf(newIngredient.name) > -1) {
-  //       const index = currentIngredients.indexOf(newIngredient.name);
-  //       this.recipeIngredients[index].amount += newIngredient.amount;
-  //     } else {
-  //       this.recipeIngredients.push(newIngredient);
-  //     }
-  //   }
-  //   this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
-  // }
+  updateRecipeIngredients(ingredients: Ingredient[], recipeItem: RecipeItem) {
+    let recipeToUpdate;
+    for (var i = 0; i < this.recipeList.length; i++) {
+      if (this.recipeList[i].name === recipeItem.name) {
+        recipeToUpdate = this.recipeList[i];
+      }
+    }
+    if (recipeToUpdate.amount === recipeItem.amount) {
+      return;
+    } else if (recipeItem.amount > recipeToUpdate.amount) {
+      
+      console.log('recipe to update', recipeToUpdate);
+      console.log('recipeItem', recipeItem);
+      // this.addRecipeIngredients(ingredients);
+    } else {
+     // this.subtractRecipeIngredients(ingredients);
+    }
+  }
 
   addIngredients(ingredients: Ingredient[]) {
     if (!this.ingredients) {
@@ -120,6 +121,16 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
+  addRecipeIngredients(ingredients: Ingredient[]) {
+    console.log('new ingredients',ingredients);
+    console.log('current ingredeints', this.ingredients);
+  }
+
+  subtractRecipeIngredients(ingredients: Ingredient[]) {
+    console.log('new ingredients',ingredients);
+    console.log('current ingredeints', this.ingredients);
+  }
+
   addRecipeItem(recipeItem) {
     let recipeItemAdded = false;
     for (var i = 0; i < this.recipeList.length; i++) {
@@ -134,32 +145,48 @@ export class ShoppingListService {
     this.recipeListChanged.next(this.recipeList.slice());
   }
 
-  updateIngredient(index: number, newIngredient:Ingredient) {
-    this.ingredients[index] = newIngredient;
-    for (var i = 0; i < this.extraIngredients.length; i++) {
-      if (this.extraIngredients[i].name === newIngredient.name) {
-        this.extraIngredients[i] = newIngredient;
+  updateIngredient(index: number, newIngredient:Ingredient, previousAmount: number) {
+    if(this.extraIngredients[index].name !== newIngredient.name) {
+      return this.error = "An error has occured. Please Try Again";
+    }
+    this.extraIngredients[index] = newIngredient;
+    for (var i = 0; i < this.ingredients.length; i++) {
+      let name = this.ingredients[i].name;
+      let amount = this.ingredients[i].amount;
+      if (name === newIngredient.name && amount === newIngredient.amount || name !== newIngredient.name) {
+        continue;
+      } else if (name === newIngredient.name) {
+        this.ingredients[i].amount += (newIngredient.amount - previousAmount);
+        break;
       }
-      this.extraIngredientsChanged.next(this.extraIngredients.slice());
     }
     this.ingredientsChanged.next(this.ingredients.slice());
+    this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
-  deleteIngredient(index:number) {
-    const ingredient = this.ingredients[index];
-    this.deleteAdditionalIngredient(ingredient);
-    // this.deleteRecipeIngredient(ingredient);
-    this.ingredients.splice(index, 1);
-    this.ingredientsChanged.next(this.ingredients.slice());
-  }
-
-  deleteAdditionalIngredient(ingredient: Ingredient) {
-    for (var i = 0; i < this.extraIngredients.length; i++) {
-      if (this.extraIngredients[i].name === ingredient.name) {
-        this.extraIngredients.splice(i, 1);
+  deleteIngredient(ingredient: Ingredient) {
+    for (var i = 0; i < this.ingredients.length; i++) {
+      if (this.ingredients[i].name === ingredient.name && this.ingredients[i].amount > ingredient.amount) {
+        this.ingredients[i].amount -= ingredient.amount;
+      } else if (this.ingredients[i].name === ingredient.name) {
+        this.ingredients.splice(i, 1);
       }
-      this.extraIngredientsChanged.next(this.extraIngredients.slice());
+      this.ingredientsChanged.next(this.ingredients.slice());
     }
+  }
+
+  deleteAdditionalIngredient(index: number) {
+    const ingredient = this.extraIngredients[index];
+    console.log(ingredient);
+    this.deleteIngredient(ingredient)
+    this.extraIngredients.splice(index, 1);
+    this.extraIngredientsChanged.next(this.extraIngredients.slice());
+    // for (var i = 0; i < this.extraIngredients.length; i++) {
+    //   if (this.extraIngredients[i].name === ingredient.name) {
+    //     this.extraIngredients.splice(i, 1);
+    //   }
+    //   this.extraIngredientsChanged.next(this.extraIngredients.slice());
+    // }
   }
 
   // deleteRecipeIngredient(ingredient: Ingredient) {

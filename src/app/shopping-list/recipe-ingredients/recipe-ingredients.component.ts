@@ -1,3 +1,4 @@
+import { RecipeService } from './../../recipes/recipe.service';
 import { RecipeListComponent } from './../../recipes/recipe-list/recipe-list.component';
 import { Response } from '@angular/http';
 import { RecipeItem } from './../../shared/recipe-item.model';
@@ -18,7 +19,8 @@ export class RecipeIngredientsComponent implements OnInit {
   recipeItems: RecipeItem[];
 
   constructor(private shoppingListService: ShoppingListService,
-              private dataStorageService: DataStorageService) { }
+              private dataStorageService: DataStorageService,
+              private recipeService: RecipeService) { }
 
   ngOnInit() {
     this.recipeListSubscription = this.shoppingListService.recipeListChanged
@@ -31,23 +33,28 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   onAddItem(form: NgForm) {
-    const ingredient = {
+    const recipeItem = {
       name: form.value.name,
       amount: form.value.amount
     }
-    this.shoppingListService.addIngredient(ingredient);
-    // this.shoppingListService.addRecipeIngredient(ingredient);
-    form.reset();
-    this.dataStorageService.storeShoppingList().subscribe(
-      (response: Response) => response
-    );
-    this.dataStorageService.storeRecipeList().subscribe(
-      (response: Response) => response
-    );
+    this.recipeService.addRecipeIngredients(recipeItem);
+    //this.shoppingListService.addRecipeItem(recipeItem);
+    this.onClear();
+    // this.dataStorageService.storeShoppingList().subscribe(
+    //   (response: Response) => response
+    // );
+    // this.dataStorageService.storeRecipeList().subscribe(
+    //   (response: Response) => response
+    // );
+  }
+
+  onDelete(form: NgForm) {
+
   }
 
   onClear() {
     this.slForm.reset();
+    this.slForm.controls.name.setValue('Please Select a Recipe');
   }
 
 }

@@ -25,6 +25,11 @@
             pattern="^[1-9]+[0-9]*$">
         </div>
       </div>
+      <div
+        *ngIf="error" 
+        class="alert alert-danger">
+        <strong>{{ error }}</strong>
+      </div>
       <div class='row'>
         <div class='col-xs-12'>
           <button
@@ -34,7 +39,7 @@
           <button
             class='btn btn-danger'
             type='button'
-            (click)="onDelete()"
+            (click)="onDelete(f)"
             *ngIf="editMode">Delete</button>
           <button
             class='btn btn-primary'
@@ -45,11 +50,13 @@
     </form>
     <br>
     <ul class="list-group">
-      <li
+      <a
         class="list-group-item"
-        *ngFor='let ingredient of extraIngredients;'>
+        *ngFor='let ingredient of extraIngredients; let i = index'
+        style="cursor: pointer;"
+        (click)="onEditClicked(ingredient, i)">
         {{ ingredient.name}} ({{ ingredient.amount }})
-      </li>
+      </a>
     </ul>
   </div>
 </div>

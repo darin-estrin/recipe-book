@@ -51,6 +51,19 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
+  addRecipeIngredients(recipeItem: RecipeItem) {
+    let ingredients;
+    for (var i = 0; i < this.recipes.length; i++) {
+      if (this.recipes[i].name === recipeItem.name) {
+        ingredients = this.recipes[i].ingredients;
+      }
+    }
+    ingredients.forEach(ingredient => {
+      ingredient.amount *= recipeItem.amount;
+    });
+    this.shoppingListService.updateRecipeIngredients(ingredients, recipeItem);
+  }
+
   updateRecipe(index: number, newRecipe: Recipe) {
     newRecipe.ingredients.forEach((ingredient) => {
       ingredient.name = ingredient.name.toLowerCase();
