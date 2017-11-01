@@ -44,12 +44,12 @@ export class RecipeIngredientsComponent implements OnInit {
     this.recipeService.addRecipeIngredients(recipeItem, oldRecipeItem);
     this.shoppingListService.updateRecipeItem(recipeItem);
     this.onClear();
-    // this.dataStorageService.storeShoppingList().subscribe(
-    //   (response: Response) => response
-    // );
-    // this.dataStorageService.storeRecipeList().subscribe(
-    //   (response: Response) => response
-    // );
+    this.dataStorageService.storeShoppingList().subscribe(
+      (response: Response) => response
+    );
+    this.dataStorageService.storeRecipeList().subscribe(
+      (response: Response) => response
+    );
   }
 
   onDelete(form: NgForm) {
