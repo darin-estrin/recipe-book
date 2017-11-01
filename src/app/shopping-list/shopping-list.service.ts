@@ -197,7 +197,6 @@ export class ShoppingListService {
 
   deleteAdditionalIngredient(index: number) {
     const ingredient = this.extraIngredients[index];
-    console.log(ingredient);
     this.deleteIngredient(ingredient)
     this.extraIngredients.splice(index, 1);
     this.extraIngredientsChanged.next(this.extraIngredients.slice());

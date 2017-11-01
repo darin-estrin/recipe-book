@@ -41,7 +41,6 @@ export class RecipeIngredientsComponent implements OnInit {
     if (oldRecipeItem.amount === recipeItem.amount) {
       return this.onClear();
     }
-    debugger;
     this.recipeService.addRecipeIngredients(recipeItem, oldRecipeItem);
     this.shoppingListService.updateRecipeItem(recipeItem);
     this.onClear();
