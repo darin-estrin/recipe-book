@@ -51,17 +51,19 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  addRecipeIngredients(recipeItem: RecipeItem) {
-    let ingredients;
+  addRecipeIngredients(recipeItem: RecipeItem, oldRecipeItem: RecipeItem) {
+    let ingredients = [];
+    let tempIngredients;
     for (var i = 0; i < this.recipes.length; i++) {
-      if (this.recipes[i].name === recipeItem.name) {
-        ingredients = this.recipes[i].ingredients;
+      if (recipeItem.name === this.recipes[i].name) {
+        tempIngredients = this.recipes[i].ingredients;
       }
     }
-    ingredients.forEach(ingredient => {
-      ingredient.amount *= recipeItem.amount;
-    });
-    this.shoppingListService.updateRecipeIngredients(ingredients, recipeItem);
+    tempIngredients.forEach(ingredient => {
+      var temp = { name: ingredient.name, amount: ingredient.amount };
+      ingredients.push(temp);
+    })
+    this.shoppingListService.updateRecipeIngredients(recipeItem, oldRecipeItem, ingredients);
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {

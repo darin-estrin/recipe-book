@@ -15,7 +15,9 @@
             <option value="Please Select a Recipe" selected>
               Please Select a Recipe
             </option>
-            <option *ngFor="let recipe of recipeItems">
+            <option
+              *ngFor="let recipe of recipeItems"
+              value='{"name": "{{ recipe.name }}", "amount": {{ recipe.amount }}}'>
               {{ recipe.name }}
             </option>
           </select>

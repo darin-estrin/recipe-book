@@ -85,23 +85,25 @@ export class ShoppingListService {
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
-  updateRecipeIngredients(ingredients: Ingredient[], recipeItem: RecipeItem) {
-    let recipeToUpdate;
+  updateRecipeIngredients(recipeItem: RecipeItem, 
+    oldRecipeItem: RecipeItem, 
+    ingredients: Ingredient[]) {
+    if (recipeItem.amount > oldRecipeItem.amount) {
+      let newAmount = recipeItem.amount - oldRecipeItem.amount;
+      this.addRecipeIngredients(ingredients, newAmount);
+    } else {
+      let newAmount = oldRecipeItem.amount - recipeItem.amount;
+      this.subtractRecipeIngredients(ingredients, newAmount);
+    }
+  }
+
+  updateRecipeItem(recipeItem: RecipeItem) {
     for (var i = 0; i < this.recipeList.length; i++) {
       if (this.recipeList[i].name === recipeItem.name) {
-        recipeToUpdate = this.recipeList[i];
+        this.recipeList[i] = recipeItem;
       }
     }
-    if (recipeToUpdate.amount === recipeItem.amount) {
-      return;
-    } else if (recipeItem.amount > recipeToUpdate.amount) {
-      
-      console.log('recipe to update', recipeToUpdate);
-      console.log('recipeItem', recipeItem);
-      // this.addRecipeIngredients(ingredients);
-    } else {
-     // this.subtractRecipeIngredients(ingredients);
-    }
+    this.recipeListChanged.next(this.recipeList.slice());
   }
 
   addIngredients(ingredients: Ingredient[]) {
@@ -121,14 +123,32 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  addRecipeIngredients(ingredients: Ingredient[]) {
-    console.log('new ingredients',ingredients);
-    console.log('current ingredeints', this.ingredients);
+  addRecipeIngredients(ingredients: Ingredient[], amount: number) {
+    ingredients.forEach(ingredient => {
+      ingredient.amount *= amount;
+    })
+    for (var i = 0; i < this.ingredients.length; i++) {
+      for (var j = 0; j < ingredients.length; j++) {
+        if (this.ingredients[i].name === ingredients[j].name) {
+          this.ingredients[i].amount += ingredients[j].amount;
+        }
+      }
+    }
+    this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  subtractRecipeIngredients(ingredients: Ingredient[]) {
-    console.log('new ingredients',ingredients);
-    console.log('current ingredeints', this.ingredients);
+  subtractRecipeIngredients(ingredients: Ingredient[], amount: number) {
+    ingredients.forEach(ingredient => {
+      ingredient.amount *= amount;
+    });
+    for (var i = 0; i < this.ingredients.length; i++) {
+      for (var j = 0; j < ingredients.length; j++) {
+        if (this.ingredients[i].name === ingredients[j].name) {
+          this.ingredients[i].amount -= ingredients[j].amount;
+        }
+      }
+    }
+    this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addRecipeItem(recipeItem) {
@@ -181,12 +201,6 @@ export class ShoppingListService {
     this.deleteIngredient(ingredient)
     this.extraIngredients.splice(index, 1);
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
-    // for (var i = 0; i < this.extraIngredients.length; i++) {
-    //   if (this.extraIngredients[i].name === ingredient.name) {
-    //     this.extraIngredients.splice(i, 1);
-    //   }
-    //   this.extraIngredientsChanged.next(this.extraIngredients.slice());
-    // }
   }
 
   // deleteRecipeIngredient(ingredient: Ingredient) {

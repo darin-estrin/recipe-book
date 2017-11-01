@@ -33,12 +33,17 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   onAddItem(form: NgForm) {
+    const oldRecipeItem = JSON.parse(form.value.name);
     const recipeItem = {
-      name: form.value.name,
+      name: oldRecipeItem.name,
       amount: form.value.amount
     }
-    this.recipeService.addRecipeIngredients(recipeItem);
-    //this.shoppingListService.addRecipeItem(recipeItem);
+    if (oldRecipeItem.amount === recipeItem.amount) {
+      return this.onClear();
+    }
+    debugger;
+    this.recipeService.addRecipeIngredients(recipeItem, oldRecipeItem);
+    this.shoppingListService.updateRecipeItem(recipeItem);
     this.onClear();
     // this.dataStorageService.storeShoppingList().subscribe(
     //   (response: Response) => response
@@ -49,7 +54,9 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   onDelete(form: NgForm) {
-
+    if (form.value.name === '' || form.value.name === 'Please Select a Recipe') {
+      return;
+    }
   }
 
   onClear() {
