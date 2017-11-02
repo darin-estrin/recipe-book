@@ -202,13 +202,31 @@ export class ShoppingListService {
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
-  // deleteRecipeIngredient(ingredient: Ingredient) {
-  //   for (var i = 0; i < this.recipeIngredients.length; i++) {
-  //     if (this.recipeIngredients[i].name === ingredient.name) {
-  //       this.recipeIngredients.splice(i, 1);
-  //     }
-  //     this.recipeIngredientsChanged.next(this.recipeIngredients.slice());
-  //   }
-  // }
+  deleteRecipeIngredients(ingredients: Ingredient[], recipeItem: RecipeItem) {
+    this.deleteRecipeItem(recipeItem);
+    for (var i = 0; i < this.ingredients.length; i++) {
+      for (var j = 0; j < ingredients.length; j++) {
+        if (this.ingredients[i].name === ingredients[j].name) {
+          this.ingredients[i].amount -= ingredients[j].amount;
+        }
+      }
+    }
+    for (var i = 0; i < this.ingredients.length; i++) {
+      if (this.ingredients[i].amount < 1) {
+        this.ingredients.splice(i, 1);
+        --i;
+      }
+    }
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
 
+  deleteRecipeItem(recipeItem: RecipeItem) {
+    for (var i = 0; i < this.recipeList.length; i++) {
+      if (this.recipeList[i].name === recipeItem.name) {
+        this.recipeList.splice(i, 1);
+      }
+    }
+    this.recipeListChanged.next(this.recipeList.slice());
+  }
+  
 }

@@ -54,8 +54,17 @@ export class RecipeIngredientsComponent implements OnInit {
 
   onDelete(form: NgForm) {
     if (form.value.name === '' || form.value.name === 'Please Select a Recipe') {
-      return;
+      return this.onClear();
     }
+    let recipeItem = JSON.parse(form.value.name);
+    this.recipeService.deleteRecipeItem(recipeItem);
+    this.onClear();
+    this.dataStorageService.storeShoppingList().subscribe(
+      (response: Response) => response
+    );
+    this.dataStorageService.storeRecipeList().subscribe(
+      (response: Response) => response
+    );
   }
 
   onClear() {

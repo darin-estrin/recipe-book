@@ -62,7 +62,7 @@ export class RecipeService {
     tempIngredients.forEach(ingredient => {
       var temp = { name: ingredient.name, amount: ingredient.amount };
       ingredients.push(temp);
-    })
+    });
     this.shoppingListService.updateRecipeIngredients(recipeItem, oldRecipeItem, ingredients);
   }
 
@@ -77,5 +77,20 @@ export class RecipeService {
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
+  }
+
+  deleteRecipeItem(recipeItem: RecipeItem) {
+    let ingredients = [];
+    let tempIngredients;
+    for (var i = 0; i < this.recipes.length; i++) {
+      if (recipeItem.name === this.recipes[i].name) {
+        tempIngredients = this.recipes[i].ingredients;
+      }
+    }
+    tempIngredients.forEach(ingredient => {
+      var temp = { name: ingredient.name, amount: ingredient.amount *= recipeItem.amount };
+      ingredients.push(temp);
+    });
+    this.shoppingListService.deleteRecipeIngredients(ingredients, recipeItem);
   }
 }
