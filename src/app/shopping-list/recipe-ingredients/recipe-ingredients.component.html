@@ -12,8 +12,8 @@
             name="name"
             ngModel
             required>
-            <option value="Please Select a Recipe" selected>
-              Please Select a Recipe
+            <option value="Add Recipe Ingredients to shopping list" selected>
+              Add Recipe Ingredients to shopping list
             </option>
             <option
               *ngFor="let recipe of recipeItems"
@@ -38,12 +38,14 @@
         <div class='col-xs-12'>
           <button
             class='btn btn-success'
+            [disabled]="!f.valid || f.value.name === 'Add Recipe Ingredients to shopping list'"
             type='submit'
-            [disabled]="!f.valid || f.value.name === 'Please Select a Recipe'">Update</button>
+            >Update</button>
           <button
             class='btn btn-danger'
             type='button'
             (click)="onDelete(f)"
+            [disabled]="!f.valid || f.value.name === 'Add Recipe Ingredients to shopping list'"
             >Delete</button>
           <button
             class='btn btn-primary'

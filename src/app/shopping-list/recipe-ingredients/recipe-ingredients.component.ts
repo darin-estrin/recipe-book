@@ -6,14 +6,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { ShoppingListService } from './../shopping-list.service';
 import { DataStorageService } from './../../shared/data-storage.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'app-recipe-ingredients',
   templateUrl: './recipe-ingredients.component.html',
   styleUrls: ['./recipe-ingredients.component.css']
 })
-export class RecipeIngredientsComponent implements OnInit {
+export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
   @ViewChild('f') slForm: NgForm;
   recipeListSubscription: Subscription;
   recipeItems: RecipeItem[];
@@ -30,6 +30,12 @@ export class RecipeIngredientsComponent implements OnInit {
       }
     );
     this.dataStorageService.fetchRecipeList();
+  }
+
+  ngAfterViewChecked() {
+    if(this.slForm.controls.name && this.slForm.value.name == "") {
+      this.slForm.controls.name.setValue("Add Recipe Ingredients to shopping list");
+    }
   }
 
   onAddItem(form: NgForm) {
@@ -53,7 +59,7 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   onDelete(form: NgForm) {
-    if (form.value.name === '' || form.value.name === 'Please Select a Recipe') {
+    if (form.value.name === '' || form.value.name === 'Add Recipe Ingredients to shopping list') {
       return this.onClear();
     }
     let recipeItem = JSON.parse(form.value.name);
@@ -69,7 +75,7 @@ export class RecipeIngredientsComponent implements OnInit {
 
   onClear() {
     this.slForm.reset();
-    this.slForm.controls.name.setValue('Please Select a Recipe');
+    this.slForm.controls.name.setValue('Add Recipe Ingredients to shopping list');
   }
 
 }
