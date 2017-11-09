@@ -10,6 +10,7 @@
             id="name"
             class="form-control"
             name="name"
+            disabled
             ngModel
             required>
         </div>
@@ -36,7 +37,6 @@
             class='btn btn-danger'
             type='button'
             (click)="onDelete(f)"
-            [disabled]="!f.valid"
             >Delete</button>
           <button
             class='btn btn-primary'
