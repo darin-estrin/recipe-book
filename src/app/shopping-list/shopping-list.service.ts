@@ -122,8 +122,6 @@ export class ShoppingListService {
   }
 
   addUpdatedRecipeIngredients(recipeItem: RecipeItem, ingredients: Ingredient[]) {
-    console.log('current ingredients',this.ingredients);
-    console.log('recipe item',recipeItem, '\n new recipe ingredients',ingredients);
     let tempIngredients = [];
     for (var i = 0; i < ingredients.length; i++) {
       tempIngredients.push(new Ingredient(ingredients[i].name, ingredients[i].amount));
@@ -165,10 +163,15 @@ export class ShoppingListService {
     ingredients.forEach(ingredient => {
       ingredient.amount *= amount;
     })
-    for (var i = 0; i < this.ingredients.length; i++) {
-      for (var j = 0; j < ingredients.length; j++) {
-        if (this.ingredients[i].name === ingredients[j].name) {
-          this.ingredients[i].amount += ingredients[j].amount;
+    
+    if(this.ingredients.length <= 0) {
+      this.ingredients.push(...ingredients);
+    } else {
+      for (var i = 0; i < this.ingredients.length; i++) {
+        for (var j = 0; j < ingredients.length; j++) {
+          if (this.ingredients[i].name === ingredients[j].name) {
+            this.ingredients[i].amount += ingredients[j].amount;
+          }
         }
       }
     }
@@ -263,7 +266,7 @@ export class ShoppingListService {
   deleteRecipeItem(recipeItem: RecipeItem) {
     for (var i = 0; i < this.recipeList.length; i++) {
       if (this.recipeList[i].name === recipeItem.name) {
-        this.recipeList.splice(i, 1);
+        this.recipeList[i].amount = 0;
       }
     }
     this.recipeListChanged.next(this.recipeList.slice());

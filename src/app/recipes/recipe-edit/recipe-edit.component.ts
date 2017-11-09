@@ -32,24 +32,28 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
-    // const newRecipe = new Recipe(
-    //   this.recipeForm.value['name'],
-    //   this.recipeForm.value['description'],
-    //   this.recipeForm.value['imagePath'],
-    //   this.recipeForm.value['ingredients']);
+    let recipeItem = {
+      name: this.recipeForm.value.name,
+      amount: 0
+    }
     if (this.editMode) {
       this.recipeService.updateRecipe(this.id, this.recipeForm.value);
     } else {
       this.recipeService.addRecipe(this.recipeForm.value);
     }
+    this.recipeService.addRecipeItem(recipeItem);
     this.dataStorageService.storeRecipes()
     .subscribe(
       (response: Response) => response
     );
     this.dataStorageService.storeShoppingList()
-      .subscribe(
-        (response: Response) => response
-      )
+    .subscribe(
+      (response: Response) => response
+    );
+    this.dataStorageService.storeRecipeList()
+    .subscribe(
+      (response: Response) => response
+    );
     this.onCancel();
   }
 

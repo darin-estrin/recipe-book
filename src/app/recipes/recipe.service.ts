@@ -89,7 +89,9 @@ export class RecipeService {
       }
     }
     tempIngredients.forEach(ingredient => {
-      var temp = { name: ingredient.name, amount: ingredient.amount *= recipeItem.amount };
+      var name = ingredient.name;
+      var amount = ingredient.amount *= recipeItem.amount;
+      var temp = new Ingredient(name, amount);
       ingredients.push(temp);
     });
     this.shoppingListService.deleteRecipeIngredients(ingredients, recipeItem);

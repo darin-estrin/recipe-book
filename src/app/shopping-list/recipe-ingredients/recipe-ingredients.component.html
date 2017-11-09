@@ -1,26 +1,17 @@
 <div class='row'>
   <div class='col-xs-12'>
     <h4>Recipes</h4>
-    <form (ngSubmit)="onAddItem(f)" #f="ngForm">
+    <form (ngSubmit)="onAddItem(f)" #f="ngForm" [hidden]="!editMode">
       <div class='row'>
         <div class='col-sm-5 form-group'>
           <label for='name'>Name</label>
-          <select
-            type='text'
-            id='name'
-            class='form-control'
+          <input
+            type="text"
+            id="name"
+            class="form-control"
             name="name"
             ngModel
             required>
-            <option value="Add Recipe Ingredients to shopping list" selected>
-              Add Recipe Ingredients to shopping list
-            </option>
-            <option
-              *ngFor="let recipe of recipeItems"
-              value='{"name": "{{ recipe.name }}", "amount": {{ recipe.amount }}}'>
-              {{ recipe.name }}
-            </option>
-          </select>
         </div>
         <div class='col-sm-4 form-group'>
           <label for='amount'>Amount</label>
@@ -38,14 +29,14 @@
         <div class='col-xs-12'>
           <button
             class='btn btn-success'
-            [disabled]="!f.valid || f.value.name === 'Add Recipe Ingredients to shopping list'"
+            [disabled]="!f.valid"
             type='submit'
             >Update</button>
           <button
             class='btn btn-danger'
             type='button'
             (click)="onDelete(f)"
-            [disabled]="f.value.name === 'Add Recipe Ingredients to shopping list'"
+            [disabled]="!f.valid"
             >Delete</button>
           <button
             class='btn btn-primary'
@@ -59,7 +50,8 @@
       <a
         style="cursor: pointer;"
         class="list-group-item" 
-        *ngFor='let recipe of recipeItems;'>
+        *ngFor='let recipe of recipeItems;'
+        (click)="onClick(recipe)">
         {{ recipe.name }} ({{ recipe.amount }})
       </a>
     </ul>

@@ -6,17 +6,18 @@ import { Subscription } from 'rxjs/Subscription';
 import { ShoppingListService } from './../shopping-list.service';
 import { DataStorageService } from './../../shared/data-storage.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-recipe-ingredients',
   templateUrl: './recipe-ingredients.component.html',
   styleUrls: ['./recipe-ingredients.component.css']
 })
-export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
+export class RecipeIngredientsComponent implements OnInit {
   @ViewChild('f') slForm: NgForm;
   recipeListSubscription: Subscription;
   recipeItems: RecipeItem[];
+  editMode = false;
 
   constructor(private shoppingListService: ShoppingListService,
               private dataStorageService: DataStorageService,
@@ -32,12 +33,6 @@ export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
     this.dataStorageService.fetchRecipeList();
   }
 
-  ngAfterViewChecked() {
-    if(this.slForm.controls.name && this.slForm.value.name == "") {
-      this.slForm.controls.name.setValue("Add Recipe Ingredients to shopping list");
-    }
-  }
-
   onAddItem(form: NgForm) {
     const oldRecipeItem = JSON.parse(form.value.name);
     const recipeItem = {
@@ -47,6 +42,7 @@ export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
     if (oldRecipeItem.amount === recipeItem.amount) {
       return this.onClear();
     }
+
     this.recipeService.addRecipeIngredients(recipeItem, oldRecipeItem);
     this.shoppingListService.updateRecipeItem(recipeItem);
     this.onClear();
@@ -58,10 +54,13 @@ export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
     );
   }
 
+  onClick(recipe: RecipeItem) {
+    this.editMode = true;
+    this.slForm.controls.name.setValue(recipe.name);
+    this.slForm.controls.amount.setValue(recipe.amount);
+  }
+
   onDelete(form: NgForm) {
-    if (form.value.name === '' || form.value.name === 'Add Recipe Ingredients to shopping list') {
-      return this.onClear();
-    }
     let recipeItem = JSON.parse(form.value.name);
     this.recipeService.deleteRecipeItem(recipeItem);
     this.onClear();
@@ -75,7 +74,7 @@ export class RecipeIngredientsComponent implements OnInit, AfterViewChecked {
 
   onClear() {
     this.slForm.reset();
-    this.slForm.controls.name.setValue('Add Recipe Ingredients to shopping list');
+    this.editMode = false;
   }
 
 }
