@@ -36,7 +36,6 @@ export class RecipeIngredientsComponent implements OnInit {
   }
 
   onAddItem(form: NgForm) {
-    console.log(form);
     const oldRecipeItem = {
       name: this.recipe,
       amount: this.oldAmount
