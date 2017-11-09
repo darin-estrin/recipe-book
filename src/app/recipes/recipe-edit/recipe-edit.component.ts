@@ -44,10 +44,12 @@ export class RecipeEditComponent implements OnInit {
     }
     this.dataStorageService.storeRecipes()
     .subscribe(
-      (response: Response) => {
-        return response;
-      }
+      (response: Response) => response
     );
+    this.dataStorageService.storeShoppingList()
+      .subscribe(
+        (response: Response) => response
+      )
     this.onCancel();
   }
 

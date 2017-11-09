@@ -44,6 +44,9 @@ export class RecipeDetailComponent implements OnInit {
       temp.amount *= quantity;
       shoppingListIngredients.push(temp);
     });
+    if (shoppingListIngredients.length <= 0){
+      return;
+    }
     this.recipeService.addToShoppingList(shoppingListIngredients);
     this.recipeService.addRecipeItem(recipeItem);
     this.dataStorageService.storeShoppingList().subscribe(

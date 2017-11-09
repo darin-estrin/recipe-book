@@ -70,6 +70,7 @@ export class RecipeService {
     newRecipe.ingredients.forEach((ingredient) => {
       ingredient.name = ingredient.name.toLowerCase();
     });
+    this.shoppingListService.recipeUpdated(this.recipes[index], newRecipe);
     this.recipes[index] = newRecipe;
     this.recipesChanged.next(this.recipes.slice());
   }

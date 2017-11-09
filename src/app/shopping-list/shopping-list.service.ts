@@ -1,5 +1,7 @@
+import { element } from 'protractor';
 import { Ingredient } from './../shared/ingredient.model';
 import { RecipeItem } from './../shared/recipe-item.model';
+import { Recipe } from './../recipes/recipe.model';
 import { Subject } from 'rxjs/Subject';
 
 export class ShoppingListService {
@@ -97,6 +99,41 @@ export class ShoppingListService {
     }
   }
 
+  recipeUpdated(recipe: Recipe, newRecipe: Recipe) {
+    let recipeItem;
+    let tempIngredients = [];
+    this.recipeList.forEach(element => {
+      if(element.name === recipe.name) {
+        recipeItem = element;
+      }
+    });
+    if(!recipeItem){
+      console.log('no recipe item found...returning');
+      return;
+    }
+    recipe.ingredients.forEach(element => {
+      var name = element.name;
+      var amount = element.amount *= recipeItem.amount;
+      var temp = new Ingredient(name, amount);
+      tempIngredients.push(temp);
+    });
+    this.deleteRecipeIngredients(tempIngredients);
+    this.addUpdatedRecipeIngredients(recipeItem, newRecipe.ingredients);
+  }
+
+  addUpdatedRecipeIngredients(recipeItem: RecipeItem, ingredients: Ingredient[]) {
+    console.log('current ingredients',this.ingredients);
+    console.log('recipe item',recipeItem, '\n new recipe ingredients',ingredients);
+    let tempIngredients = [];
+    for (var i = 0; i < ingredients.length; i++) {
+      tempIngredients.push(new Ingredient(ingredients[i].name, ingredients[i].amount));
+    }
+    tempIngredients.forEach(element => {
+      element.amount *= recipeItem.amount;
+    });
+    this.addIngredients(tempIngredients);
+  }
+
   updateRecipeItem(recipeItem: RecipeItem) {
     for (var i = 0; i < this.recipeList.length; i++) {
       if (this.recipeList[i].name === recipeItem.name) {
@@ -120,6 +157,7 @@ export class ShoppingListService {
        }
        this.ingredients.push(...ingredients);
     }
+    console.log(this.ingredients);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
@@ -202,8 +240,10 @@ export class ShoppingListService {
     this.extraIngredientsChanged.next(this.extraIngredients.slice());
   }
 
-  deleteRecipeIngredients(ingredients: Ingredient[], recipeItem: RecipeItem) {
-    this.deleteRecipeItem(recipeItem);
+  deleteRecipeIngredients(ingredients: Ingredient[], recipeItem?: RecipeItem) {
+    if (recipeItem) {
+      this.deleteRecipeItem(recipeItem);
+    }
     for (var i = 0; i < this.ingredients.length; i++) {
       for (var j = 0; j < ingredients.length; j++) {
         if (this.ingredients[i].name === ingredients[j].name) {
@@ -211,10 +251,10 @@ export class ShoppingListService {
         }
       }
     }
-    for (var i = 0; i < this.ingredients.length; i++) {
-      if (this.ingredients[i].amount < 1) {
-        this.ingredients.splice(i, 1);
-        --i;
+    for (var k = 0; k < this.ingredients.length; k++) {
+      if (this.ingredients[k].amount < 1) {
+        this.ingredients.splice(k, 1);
+        --k;
       }
     }
     this.ingredientsChanged.next(this.ingredients.slice());

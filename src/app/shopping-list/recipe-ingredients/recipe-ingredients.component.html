@@ -45,7 +45,7 @@
             class='btn btn-danger'
             type='button'
             (click)="onDelete(f)"
-            [disabled]="!f.valid || f.value.name === 'Add Recipe Ingredients to shopping list'"
+            [disabled]="f.value.name === 'Add Recipe Ingredients to shopping list'"
             >Delete</button>
           <button
             class='btn btn-primary'
@@ -56,11 +56,12 @@
     </form>
     <br>
     <ul class="list-group">
-      <li
+      <a
+        style="cursor: pointer;"
         class="list-group-item" 
         *ngFor='let recipe of recipeItems;'>
         {{ recipe.name }} ({{ recipe.amount }})
-      </li>
+      </a>
     </ul>
   </div>
 </div>
