@@ -80,6 +80,7 @@ export class RecipeIngredientsComponent implements OnInit {
     this.dataStorageService.storeRecipeList().subscribe(
       (response: Response) => response
     );
+    this.dataStorageService.getRecipes();
   }
 
   onClear() {

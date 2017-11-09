@@ -108,7 +108,6 @@ export class ShoppingListService {
       }
     });
     if(!recipeItem){
-      console.log('no recipe item found...returning');
       return;
     }
     recipe.ingredients.forEach(element => {
@@ -155,7 +154,6 @@ export class ShoppingListService {
        }
        this.ingredients.push(...ingredients);
     }
-    console.log(this.ingredients);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
@@ -171,9 +169,11 @@ export class ShoppingListService {
         for (var j = 0; j < ingredients.length; j++) {
           if (this.ingredients[i].name === ingredients[j].name) {
             this.ingredients[i].amount += ingredients[j].amount;
+            ingredients.splice(j, 1);
           }
         }
       }
+      this.ingredients.push(...ingredients);
     }
     this.ingredientsChanged.next(this.ingredients.slice());
   }
