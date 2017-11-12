@@ -74,6 +74,7 @@ export class DataStorageService {
   }
 
   storeRecipeList() {
+    console.log('saving recipe list', this.shoppingListService.getRecipeList());
     const user = this.authService.getUser();
     return this.http.put(`${this.ROOT_URL}/${user.uid}/recipeList.json?auth=${user['De']}`,
     this.shoppingListService.getRecipeList());

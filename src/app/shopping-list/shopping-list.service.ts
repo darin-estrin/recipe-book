@@ -23,6 +23,7 @@ export class ShoppingListService {
   }
 
   getRecipeList() {
+    console.log('recipe list', this.recipeList);
     return this.recipeList.slice();
   }
 
@@ -269,6 +270,16 @@ export class ShoppingListService {
         this.recipeList[i].amount = 0;
       }
     }
+    this.recipeListChanged.next(this.recipeList.slice());
+  }
+
+  removeRecipeItem(recipeItem) {
+    for (var i = 0; i < this.recipeList.length; i++) {
+      if (this.recipeList[i].name === recipeItem.name) {
+        this.recipeList.splice(i, 1);
+      }
+    }
+    console.log('new recipe list', this.recipeList);
     this.recipeListChanged.next(this.recipeList.slice());
   }
   

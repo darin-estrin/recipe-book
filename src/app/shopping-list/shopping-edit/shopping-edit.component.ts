@@ -37,7 +37,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onAddItem(form: NgForm) {
     this.error = '';
     const value = form.value;
-    const newIngredient = new Ingredient(value.name.toLowerCase(), value.amount);
+    const newIngredient = new Ingredient(value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, ''), value.amount);
     if (this.editMode) {
       this.shoppingListService.updateIngredient(this.editItemIndex, newIngredient, this.previousAmount);
       this.editMode = false;

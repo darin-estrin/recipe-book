@@ -33,14 +33,18 @@
   </div>
 </div>
 
-<div class='row'>
+<div class='row' *ngIf="recipe.description">
   <div class='col-xs-12'>
-    {{ recipe.description }}
+    <br>
+    <span class="help-block text-center">
+        {{ recipe.description }}
+    </span>
   </div>
 </div>
 
 <div class='row'>
   <div class='col-xs-12'>
+    <br>
     <ul class='list-group'>
       <li
         class='list-group-item'
@@ -48,6 +52,15 @@
         {{ ingredient.name }} - {{ ingredient.amount }}
       </li>
     </ul>
+  </div>
+</div>
+
+<div class="row" *ngIf="recipe.directions">
+  <div class="col-xs-12">
+    <br>
+    <span class="help-block">
+      {{ recipe.directions }}
+    </span>
   </div>
 </div>
 
