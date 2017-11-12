@@ -39,11 +39,16 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe) {
+    recipe.name = recipe.name.replace(/(^\s+)|(\s+$)/g, '');
+    recipe.imagePath = recipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
+    recipe.description = recipe.description.replace(/(^\s+)|(\s+$)/g, '');
+    recipe.directions = recipe.directions.replace(/(^\s+)|(\s+$)/g, '');
     if(recipe.ingredients) {
       recipe.ingredients.forEach((ingredient) => {
-        ingredient.name = ingredient.name.toLowerCase();
+        ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '');;
       });
     }
+    console.log(recipe);
     if (!this.recipes) {
       this.recipes = [];
     }
@@ -67,8 +72,12 @@ export class RecipeService {
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
+    newRecipe.name = newRecipe.name.replace(/(^\s+)|(\s+$)/g, '');
+    newRecipe.description = newRecipe.description.replace(/(^\s+)|(\s+$)/g, '');
+    newRecipe.directions = newRecipe.directions.replace(/(^\s+)|(\s+$)/g, '');
+    newRecipe.imagePath = newRecipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
     newRecipe.ingredients.forEach((ingredient) => {
-      ingredient.name = ingredient.name.toLowerCase();
+      ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '');
     });
     this.shoppingListService.recipeUpdated(this.recipes[index], newRecipe);
     this.recipes[index] = newRecipe;
