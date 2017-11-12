@@ -142,7 +142,6 @@ export class ShoppingListService {
 
   addIngredients(ingredients: Ingredient[]) {
     if (ingredients[0].amount === 0) {
-      console.log("no ingredients to add");
       return;
     }
     if (!this.ingredients) {

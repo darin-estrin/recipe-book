@@ -1,10 +1,9 @@
+import { Ingredient } from './../../shared/ingredient.model';
 import { Response } from '@angular/http';
 import { DataStorageService } from './../../shared/data-storage.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
-import { Ingredient } from '../../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list.service';
 
 @Component({
@@ -18,6 +17,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   editMode = false;
   editItemIndex: number;
   previousAmount: number;
+  currentIngredient: string;
   extraIngredients: Ingredient[];
   error: string;
 
@@ -37,14 +37,15 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onAddItem(form: NgForm) {
     this.error = '';
     const value = form.value;
-    const newIngredient = new Ingredient(value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, ''), value.amount);
     if (this.editMode) {
+      let newIngredient = new Ingredient(this.currentIngredient, value.amount);
       this.shoppingListService.updateIngredient(this.editItemIndex, newIngredient, this.previousAmount);
       this.editMode = false;
       if (this.shoppingListService.error) {
         this.error = this.shoppingListService.error;
       }
     } else {
+      let newIngredient = new Ingredient(value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, ''), value.amount);
       this.shoppingListService.addIngredient(newIngredient);
       this.shoppingListService.addExtraIngredient(newIngredient);
     }
@@ -65,7 +66,8 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
       name: ingredient.name,
       amount: ingredient.amount
     });
-    this.previousAmount = this.slForm.value.amount
+    this.previousAmount = this.slForm.value.amount;
+    this.currentIngredient = ingredient.name;
   }
 
   onClear() {
