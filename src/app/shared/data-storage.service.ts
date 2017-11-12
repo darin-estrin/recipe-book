@@ -39,7 +39,7 @@ export class DataStorageService {
   }
 
   getRecipes():Recipe[] {
-    //const user = this.authService.getUser();
+    const user = this.authService.getUser();
     let fetchedRecipes: Recipe[];
     firebase.auth().onAuthStateChanged((user) => {
       this.http.get(`${this.ROOT_URL}/${user.uid}/recipes.json?auth=${user['De']}`)
@@ -74,7 +74,6 @@ export class DataStorageService {
   }
 
   storeRecipeList() {
-    console.log('saving recipe list', this.shoppingListService.getRecipeList());
     const user = this.authService.getUser();
     return this.http.put(`${this.ROOT_URL}/${user.uid}/recipeList.json?auth=${user['De']}`,
     this.shoppingListService.getRecipeList());

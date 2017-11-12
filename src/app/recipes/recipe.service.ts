@@ -48,7 +48,6 @@ export class RecipeService {
         ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '');;
       });
     }
-    console.log(recipe);
     if (!this.recipes) {
       this.recipes = [];
     }

@@ -23,7 +23,6 @@ export class ShoppingListService {
   }
 
   getRecipeList() {
-    console.log('recipe list', this.recipeList);
     return this.recipeList.slice();
   }
 
@@ -142,6 +141,10 @@ export class ShoppingListService {
   }
 
   addIngredients(ingredients: Ingredient[]) {
+    if (ingredients[0].amount === 0) {
+      console.log("no ingredients to add");
+      return;
+    }
     if (!this.ingredients) {
       return this.ingredients.push(...ingredients);
     } else {
@@ -279,7 +282,6 @@ export class ShoppingListService {
         this.recipeList.splice(i, 1);
       }
     }
-    console.log('new recipe list', this.recipeList);
     this.recipeListChanged.next(this.recipeList.slice());
   }
   
