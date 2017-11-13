@@ -105,6 +105,12 @@
             </div>
             <hr>
             <div
+              *ngIf="error"
+              class='alert alert-danger text-center'>
+              <strong>{{ error }}</strong>
+            </div>
+
+            <div
               *ngIf="!recipeForm.controls.ingredients.valid && recipeForm.controls.ingredients.touched"
               class='alert alert-danger text-center'>
               <strong>Ingredients must have a name and an amount that is 1 or more</strong>

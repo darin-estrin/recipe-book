@@ -2,7 +2,7 @@ import { DataStorageService } from './../../shared/data-storage.service';
 import { RecipeService } from './../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Response } from '@angular/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 
 @Component({
@@ -10,10 +10,11 @@ import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
+  error: string;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -37,10 +38,17 @@ export class RecipeEditComponent implements OnInit {
       amount: 0
     }
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      let updatingRecipe = this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.error = updatingRecipe;
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      let addingRecipe = this.recipeService.addRecipe(this.recipeForm.value);
+      this.error = addingRecipe;
     }
+    
+    if (this.error) {
+      return;
+    }
+    
     this.recipeService.addRecipeItem(recipeItem);
     this.dataStorageService.storeRecipes()
     .subscribe(
@@ -124,6 +132,10 @@ export class RecipeEditComponent implements OnInit {
       'directions': new FormControl(recipeDirections),
       'ingredients': recipeIngredients
     });
+  }
+
+  ngOnDestroy() {
+    this.error = '';
   }
 
 }

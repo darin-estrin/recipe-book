@@ -38,21 +38,33 @@ export class RecipeService {
     this.shoppingListService.addRecipeItem(recipeItem);
   }
 
-  addRecipe(recipe: Recipe) {
-    recipe.name = recipe.name.replace(/(^\s+)|(\s+$)/g, '');
-    recipe.imagePath = recipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
-    recipe.description = recipe.description.replace(/(^\s+)|(\s+$)/g, '');
-    recipe.directions = recipe.directions.replace(/(^\s+)|(\s+$)/g, '');
+  addRecipe(recipe: Recipe): string {
+    let emptyIngredient = false;
+    recipe.name = recipe.name.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    if (recipe.name === '') {
+      return "Name cannot be empty";
+    }
+    recipe.imagePath = recipe.imagePath.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    recipe.description = recipe.description.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    recipe.directions = recipe.directions.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
     if(recipe.ingredients) {
       recipe.ingredients.forEach((ingredient) => {
-        ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '');;
+        ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+        if (ingredient.name === '') {
+          emptyIngredient = true;
+        }
       });
     }
+    if (emptyIngredient) {
+      return "Ingredient names cannot be empty";
+    }
+
     if (!this.recipes) {
       this.recipes = [];
     }
     this.recipes.push(recipe);
     this.recipesChanged.next(this.recipes.slice());
+    return null;
   }
 
   addRecipeIngredients(recipeItem: RecipeItem, oldRecipeItem: RecipeItem) {
@@ -70,17 +82,28 @@ export class RecipeService {
     this.shoppingListService.updateRecipeIngredients(recipeItem, oldRecipeItem, ingredients);
   }
 
-  updateRecipe(index: number, newRecipe: Recipe) {
-    newRecipe.name = newRecipe.name.replace(/(^\s+)|(\s+$)/g, '');
-    newRecipe.description = newRecipe.description.replace(/(^\s+)|(\s+$)/g, '');
-    newRecipe.directions = newRecipe.directions.replace(/(^\s+)|(\s+$)/g, '');
-    newRecipe.imagePath = newRecipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
+  updateRecipe(index: number, newRecipe: Recipe): string {
+    let emptyIngredient = false;
+    newRecipe.name = newRecipe.name.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    if(newRecipe.name === '') {
+      return "Name cannot be empty";
+    }
+    newRecipe.description = newRecipe.description.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    newRecipe.directions = newRecipe.directions.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    newRecipe.imagePath = newRecipe.imagePath.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
     newRecipe.ingredients.forEach((ingredient) => {
-      ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '');
+      ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+      if (ingredient.name === '') {
+        emptyIngredient = true;
+      }
     });
+    if (emptyIngredient) {
+      return "Ingredient names cannot be empty";
+    }
     this.shoppingListService.recipeUpdated(this.recipes[index], newRecipe);
     this.recipes[index] = newRecipe;
     this.recipesChanged.next(this.recipes.slice());
+    return null;
   }
 
   deleteRecipe(index: number) {

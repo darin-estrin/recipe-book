@@ -37,6 +37,16 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onAddItem(form: NgForm) {
     this.error = '';
     const value = form.value;
+    if (value.name.replace(/(^\s+)|(\s+$)/g, '') === '') {
+      this.error = 'Name cannot be empty';
+      this.slForm.setValue({
+        name: '',
+        amount: form.value.amount
+      })
+      return;
+    } else {
+      value.name = value.name.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    }
     if (this.editMode) {
       let newIngredient = new Ingredient(this.currentIngredient, value.amount);
       this.shoppingListService.updateIngredient(this.editItemIndex, newIngredient, this.previousAmount);
@@ -45,7 +55,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
         this.error = this.shoppingListService.error;
       }
     } else {
-      let newIngredient = new Ingredient(value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, ''), value.amount);
+      let newIngredient = new Ingredient(value.name.toLowerCase(), value.amount);
       this.shoppingListService.addIngredient(newIngredient);
       this.shoppingListService.addExtraIngredient(newIngredient);
     }
