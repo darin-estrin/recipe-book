@@ -44,9 +44,9 @@ export class RecipeService {
     if (recipe.name === '') {
       return "Name cannot be empty";
     }
-    recipe.imagePath = recipe.imagePath.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
-    recipe.description = recipe.description.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
-    recipe.directions = recipe.directions.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    recipe.imagePath = recipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
+    recipe.description = recipe.description.replace(/(^\s+)|(\s+$)/g, '');
+    recipe.directions = recipe.directions.replace(/(^\s+)|(\s+$)/g, '');
     if(recipe.ingredients) {
       recipe.ingredients.forEach((ingredient) => {
         ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
@@ -88,9 +88,9 @@ export class RecipeService {
     if(newRecipe.name === '') {
       return "Name cannot be empty";
     }
-    newRecipe.description = newRecipe.description.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
-    newRecipe.directions = newRecipe.directions.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
-    newRecipe.imagePath = newRecipe.imagePath.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    newRecipe.description = newRecipe.description.replace(/(^\s+)|(\s+$)/g, '');
+    newRecipe.directions = newRecipe.directions.replace(/(^\s+)|(\s+$)/g, '');
+    newRecipe.imagePath = newRecipe.imagePath.replace(/(^\s+)|(\s+$)/g, '');
     newRecipe.ingredients.forEach((ingredient) => {
       ingredient.name = ingredient.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
       if (ingredient.name === '') {
