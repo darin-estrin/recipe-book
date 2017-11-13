@@ -52,7 +52,7 @@
         class="list-group-item" 
         *ngFor='let recipe of recipeItems;'
         (click)="onClick(recipe)">
-        {{ recipe.name }} ({{ recipe.amount }})
+        {{ recipe.name | titlecase }} ({{ recipe.amount }})
       </a>
     </ul>
   </div>

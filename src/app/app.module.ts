@@ -23,6 +23,7 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { AuthGuard } from './auth/auth-guard.service';
 import { RecipeIngredientsComponent } from './shopping-list/recipe-ingredients/recipe-ingredients.component';
+import { TitlecasePipe } from './titlecase.pipe';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RecipeIngredientsComponent } from './shopping-list/recipe-ingredients/r
     RecipeEditComponent,
     SignupComponent,
     SigninComponent,
-    RecipeIngredientsComponent
+    RecipeIngredientsComponent,
+    TitlecasePipe
   ],
   imports: [
     BrowserModule,
