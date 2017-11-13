@@ -40,7 +40,7 @@ export class RecipeService {
 
   addRecipe(recipe: Recipe): string {
     let emptyIngredient = false;
-    recipe.name = recipe.name.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    recipe.name = recipe.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
     if (recipe.name === '') {
       return "Name cannot be empty";
     }
@@ -84,7 +84,7 @@ export class RecipeService {
 
   updateRecipe(index: number, newRecipe: Recipe): string {
     let emptyIngredient = false;
-    newRecipe.name = newRecipe.name.replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
+    newRecipe.name = newRecipe.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
     if(newRecipe.name === '') {
       return "Name cannot be empty";
     }

@@ -34,7 +34,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     let recipeItem = {
-      name: this.recipeForm.value.name,
+      name: this.recipeForm.value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' '),
       amount: 0
     }
     if (this.editMode) {
