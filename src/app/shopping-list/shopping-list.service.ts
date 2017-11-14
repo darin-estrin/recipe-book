@@ -140,6 +140,15 @@ export class ShoppingListService {
     this.recipeListChanged.next(this.recipeList.slice());
   }
 
+  updateRecipeItemName(newRecipeItem: string, oldRecipeItem: string) {
+    this.recipeList.forEach(recipeItem => {
+      if (recipeItem.name === oldRecipeItem) {
+        recipeItem.name = newRecipeItem;
+      }
+    });
+    this.recipeListChanged.next(this.recipeList.slice());
+  }
+
   addIngredients(ingredients: Ingredient[]) {
     if (ingredients.length <= 0 || ingredients[0].amount === 0) {
       return;

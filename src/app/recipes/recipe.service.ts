@@ -38,6 +38,10 @@ export class RecipeService {
     this.shoppingListService.addRecipeItem(recipeItem);
   }
 
+  updateRecipeItem(recipeItem: string, oldRecipeItem: string) {
+    this.shoppingListService.updateRecipeItemName(recipeItem, oldRecipeItem);
+  }
+
   addRecipe(recipe: Recipe): string {
     let emptyIngredient = false;
     recipe.name = recipe.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' ');
@@ -129,4 +133,15 @@ export class RecipeService {
     });
     this.shoppingListService.deleteRecipeIngredients(ingredients, recipeItem);
   }
+
+  checkForExistingRecipe(recipeName: string): boolean {
+    let recipeExist = false;
+    this.recipes.forEach(recipe => {
+      if (recipe.name === recipeName) {
+        recipeExist = true;
+      }
+    });
+    return recipeExist;
+  }
+
 }

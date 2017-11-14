@@ -15,6 +15,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   editMode = false;
   recipeForm: FormGroup;
   error: string;
+  oldRecipeName: string;
 
   constructor(private route: ActivatedRoute,
               private recipeService: RecipeService,
@@ -37,19 +38,34 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       name: this.recipeForm.value.name.toLowerCase().replace(/(^\s+)|(\s+$)/g, '').replace(/\s{2,}/g, ' '),
       amount: 0
     }
+
+    let action;
+
+    let existingRecipe = this.recipeService.checkForExistingRecipe(recipeItem.name);
+    if (existingRecipe  && this.oldRecipeName !== recipeItem.name) {
+      return this.error = "Recipe already exist. Please enter a different name";
+    }
+
     if (this.editMode) {
       let updatingRecipe = this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      action = 'updateRecipe';
       this.error = updatingRecipe;
     } else {
       let addingRecipe = this.recipeService.addRecipe(this.recipeForm.value);
+      action = 'addRecipe';
       this.error = addingRecipe;
     }
     
     if (this.error) {
       return;
     }
-    
-    this.recipeService.addRecipeItem(recipeItem);
+
+    if (action === 'updateRecipe') {
+      this.recipeService.updateRecipeItem(recipeItem.name, this.oldRecipeName);
+    } else if (action === 'addRecipe') {
+      this.recipeService.addRecipeItem(recipeItem);
+    }
+
     this.dataStorageService.storeRecipes()
     .subscribe(
       (response: Response) => response
@@ -105,6 +121,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     if (this.editMode) {
       const recipe = this.recipeService.getRecipe(this.id);
+      this.oldRecipeName = recipe.name;
       recipeName = recipe.name;
       recipeImagePath = recipe.imagePath;
       recipeDescription = recipe.description;
