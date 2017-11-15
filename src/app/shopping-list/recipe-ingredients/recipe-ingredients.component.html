@@ -46,7 +46,9 @@
       </div>
     </form>
     <br>
-    <ul class="list-group">
+    <ul 
+      class="list-group"
+      *ngIf="recipeItems; else noRecipes">
       <a
         style="cursor: pointer;"
         class="list-group-item" 
@@ -55,5 +57,8 @@
         {{ recipe.name | titlecase }} ({{ recipe.amount }})
       </a>
     </ul>
+    <ng-template #noRecipes>
+      <h3>No Recipes have been added</h3>
+    </ng-template>
   </div>
 </div>
