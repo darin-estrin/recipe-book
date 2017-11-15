@@ -136,7 +136,7 @@ export class RecipeService {
 
   checkForExistingRecipe(recipeName: string): boolean {
     let recipeExist = false;
-    if (this.recipes.length > 0) {
+    if (this.recipes && this.recipes.length > 0) {
       this.recipes.forEach(recipe => {
         if (recipe.name === recipeName) {
           recipeExist = true;
