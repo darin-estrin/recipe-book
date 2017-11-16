@@ -284,13 +284,24 @@ export class ShoppingListService {
     this.recipeListChanged.next(this.recipeList.slice());
   }
 
-  removeRecipeItem(recipeItem) {
+  removeRecipeItem(recipeItem: RecipeItem) {
     for (var i = 0; i < this.recipeList.length; i++) {
       if (this.recipeList[i].name === recipeItem.name) {
         this.recipeList.splice(i, 1);
       }
     }
     this.recipeListChanged.next(this.recipeList.slice());
+  }
+
+  recipeDeleted(recipe: Recipe): RecipeItem {
+    let recipeItem;
+    for (var i = 0; i < this.recipeList.length; i++) {
+      if (this.recipeList[i].name === recipe.name) {
+        recipeItem = this.recipeList[i];
+        break;
+      }
+    }
+    return recipeItem;
   }
   
 }

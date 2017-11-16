@@ -84,6 +84,9 @@ export class RecipeDetailComponent implements OnInit {
     this.dataStorageService.storeRecipeList().subscribe(
       (response: Response) => response
     );
+    this.dataStorageService.storeShoppingList().subscribe(
+      (response: Response) => response
+    );
   }
 
 }
