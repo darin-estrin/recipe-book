@@ -5,10 +5,18 @@
 </div>
 <hr>
 <div class='row'>
-  <div class='col-xs-12'>   
-    <app-recipe-item 
-      *ngFor="let recipeElement of recipes; let i = index"
-      [recipe]="recipeElement"
-      [index]="i"></app-recipe-item>
+  <div class='col-xs-12'>
+    <div *ngIf="recipes && recipes.length > 0; else noRecipes">
+      <app-recipe-item 
+        *ngFor="let recipeElement of recipes; let i = index"
+        [recipe]="recipeElement"
+        [index]="i">
+      </app-recipe-item>
+    </div>
+
+    <ng-template #noRecipes>
+      <h3>You have no recipes</h3>
+      <h3><a routerLink='/recipes/new'>Click here to add a recipe</a></h3>
+    </ng-template>
   </div>
 </div>
